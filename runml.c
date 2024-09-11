@@ -53,11 +53,18 @@ void processFile(FILE *file) {
             // add each word in line to temporary array
             processedLine[i++] = word; 
                          
+            // Handles printing 
+            } if (strcmp(word, "print") == 0) {
+                isStr = true;
+            } else if (isStr) {
+                strcat(code, "printf(\"%f\", ");
+                strcat(code, word);
+            } 
 
             // Handle variable assignment 
             if (strcmp(word, "<-") == 0) {
                 strcat(code, "double ");
-                strcat(code, processedLine[i]);  
+                strcat(code, processedLine[0]);  
                 strcat(code, " = ");
                  // Mark that a variable assignment is found
                 isVar = true; 
@@ -66,15 +73,6 @@ void processFile(FILE *file) {
                 strcat(code, word);
                 strcat(code, ";");
                 isVar = false;
-            // Handles printing 
-            } else if (strcmp(word, "print") == 0) {
-                strcat(code, "printf(\"%f\", ");
-                isStr = true;
-            } else if (isStr) {
-                strcat(code, word);
-                strcat(code, ");");
-                isStr = false;
-            } 
 
             // Get the next word
             word = strtok(NULL, " ");
