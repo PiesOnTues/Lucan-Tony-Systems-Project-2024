@@ -4,31 +4,34 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+#define LINELENGTH 256
+
 void processFile(FILE *file) {
-    char line[256];
-    char code[1024];
+    char line[LINELENGTH];
+    char code[BUFSIZ];
     bool isVar = false;
     bool isStr = false;
 
+    // Remove newline character
     while (fgets(line, sizeof(line), file)) {
-        line[strcspn(line, "\n")] = '\0';  // Remove newline character
+        line[strcspn(line, "\n")] = '\0';  
 
-        if (strchr(line, '#') != NULL) {  // Skip comments
+        // Skip comments
+        if (strchr(line, '#') != NULL) {  
             continue;
         }
+        
+        // Reset code buffer
+        code[0] = '\0';  
 
-        code[0] = '\0';  // Reset code buffer
-
-        char *processedLine[256] = {0};  // Initialize array to NULL
+        // Initialize array to NULL
+        char *processedLine[LINELENGTH] = {0};  
         int i = 0;
 
         char *word = strtok(line, " \t");
         while (word != NULL) {
-            if (i < 256) {
-                processedLine[i++] = word;  // Store word safely within bounds
-            }
+            processedLine[i++] = word; 
 
-            // Handle printing
             if (strcmp(word, "print") == 0) {
                 strcat(code, "printf(\"%f\", ");
                 isStr = true;
@@ -69,7 +72,7 @@ void processFile(FILE *file) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) {  // Adjusted to expect only one argument
+    if (argc != 2) { 
         fprintf(stderr, "usage: %s <input file>\n", argv[0]);
         return 1;
     }
