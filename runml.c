@@ -11,7 +11,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-#define operators {"*","+"}
+
 
 void processFile(FILE *file) {
 
