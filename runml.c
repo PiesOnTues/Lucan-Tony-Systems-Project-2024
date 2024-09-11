@@ -21,11 +21,14 @@ void processFile(FILE *file) {
 
     
     // Bool stores whether the word is part of a variable definition
-    bool isVar = false;
-    bool isStr = false;
+    bool isvar = false;
+    bool isstr = false;
 
     // Read file line by line
     while (fgets(line, sizeof(line), file)) {
+
+        // Stores the previous words in the line
+        char prev[1024] = "";
 
         // Remove newline character
         line[strcspn(line, "\n")] = '\0';
@@ -54,7 +57,7 @@ void processFile(FILE *file) {
             processedLine[i++] = word; 
                          
             // Handles printing 
-            if (strcmp(word, "print") == 0) {
+            } if (strcmp(word, "print") == 0) {
                 isStr = true;
             } else if (isStr) {
                 strcat(code, "printf(\"%f\", ");
@@ -64,16 +67,16 @@ void processFile(FILE *file) {
             // Handle variable assignment 
             if (strcmp(word, "<-") == 0) {
                 strcat(code, "double ");
-                strcat(code, processedLine[0]);  
+                strcat(code, &prev[index]);  
                 strcat(code, " = ");
                  // Mark that a variable assignment is found
-                isVar = true; 
-            } else if (isVar) {
+                isvar = true; 
+            } else if (isvar) {
                 // Append the value to code and reset isvars dawg
                 strcat(code, word);
                 strcat(code, ";");
                 isVar = false;
-            } 
+
             // Get the next word
             word = strtok(NULL, " ");
         }
@@ -81,10 +84,6 @@ void processFile(FILE *file) {
         // Print the processed line if code is not empty
         if (strlen(code) > 0) {
             printf("%s\n", code);
-        }
-
-        for (int j = 0; j < i; j++) { 
-            printf("%s\n", processedLine[j]);
         }
     }
 
