@@ -39,16 +39,24 @@ void processFile(FILE *file) {
             continue;
         }
 
-
         // Reset code buffer for each line
         code[0] = '\0';
 
         // Split the line into words
         char *word = strtok(line, " \t");
 
+        // create array to store each line
+        char *processedLine[64];
+
+        // set index counter to 0
+        int i = 0;
+
         // Process each word in the line
         while (word != NULL) {
-            index++;
+            
+            // add each word in line to temporary array
+            processedLine[i++] = word;                
+
             // Handle variable assignment 
             if (strcmp(word, "<-") == 0) {
                 strcat(code, "double ");
@@ -74,7 +82,7 @@ void processFile(FILE *file) {
             strcat(prev, " ");
 
             // Get the next word
-            word = strtok(NULL, " \t");
+            word = strtok(NULL, " ");
         }
 
         // Print the processed line if code is not empty
