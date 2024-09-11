@@ -11,7 +11,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-
+#define operators {"*","+"}
 
 void processFile(FILE *file) {
 
@@ -68,7 +68,7 @@ void processFile(FILE *file) {
             } else {
                 // Save the current word in prev for future reference
                 strcpy(prev, word);
-            }
+            } 
             // Get the next word
             word = strtok(NULL, " \t");
         }
@@ -88,7 +88,7 @@ void processFile(FILE *file) {
 
 
 int main(int argc, char *argv[]) {
-    
+
     // Check if the correct number of arguments is provided
     if (argc != 2) {
         fprintf(stderr, "usage: %s <input file> \n", argv[0]);
