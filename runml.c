@@ -27,10 +27,6 @@ void processFile(FILE *file) {
     // Read file line by line
     while (fgets(line, sizeof(line), file)) {
 
-        // Stores the previous words in the line
-        char prev[1024] = "";
-        int index = 0;
-
         // Remove newline character
         line[strcspn(line, "\n")] = '\0';
 
@@ -55,12 +51,13 @@ void processFile(FILE *file) {
         while (word != NULL) {
             
             // add each word in line to temporary array
-            processedLine[i++] = word;                
+            processedLine[i++] = word; 
+                         
 
             // Handle variable assignment 
             if (strcmp(word, "<-") == 0) {
                 strcat(code, "double ");
-                strcat(code, prev);  
+                strcat(code, processedLine[i]);  
                 strcat(code, " = ");
                  // Mark that a variable assignment is found
                 isVar = true; 
@@ -77,11 +74,7 @@ void processFile(FILE *file) {
                 strcat(code, word);
                 strcat(code, ");");
                 isStr = false;
-            } else {
-                strcat(prev, word);
-                strcat(prev, " ");
-            }
-            
+            } 
 
             // Get the next word
             word = strtok(NULL, " ");
@@ -90,6 +83,10 @@ void processFile(FILE *file) {
         // Print the processed line if code is not empty
         if (strlen(code) > 0) {
             printf("%s\n", code);
+        }
+
+        for (int j = 0; j < i; j++) { 
+            printf("%s\n", processedLine[j]);
         }
     }
 
