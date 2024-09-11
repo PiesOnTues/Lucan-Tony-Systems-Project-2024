@@ -29,7 +29,7 @@ void processFile(FILE *file) {
         if (strchr(line, '#') != NULL) {
             continue;
         }
-
+        
         // Reset code buffer for each line
         code[0] = '\0';
 
