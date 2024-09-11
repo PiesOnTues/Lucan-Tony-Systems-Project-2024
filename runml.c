@@ -21,8 +21,8 @@ void processFile(FILE *file) {
 
     
     // Bool stores whether the word is part of a variable definition
-    bool isvar = false;
-    bool isstr = false;
+    bool isVar = false;
+    bool isStr = false;
 
     // Read file line by line
     while (fgets(line, sizeof(line), file)) {
@@ -52,26 +52,28 @@ void processFile(FILE *file) {
             // Handle variable assignment 
             if (strcmp(word, "<-") == 0) {
                 strcat(code, "double ");
-                strcat(code, &prev[index]);  
+                strcat(code, prev);  
                 strcat(code, " = ");
                  // Mark that a variable assignment is found
-                isvar = true; 
-            } else if (isvar) {
+                isVar = true; 
+            } else if (isVar) {
                 // Append the value to code and reset isvars dawg
                 strcat(code, word);
                 strcat(code, ";");
-                isvar = false;
+                isVar = false;
             // Handles printing 
             } else if (strcmp(word, "print") == 0) {
                 strcat(code, "printf(\"%f\", ");
-                isstr = true;
-            } else if (isstr) {
+                isStr = true;
+            } else if (isStr) {
                 strcat(code, word);
                 strcat(code, ");");
-                isstr = false;
+                isStr = false;
+            } else {
+                strcat(prev, word);
+                strcat(prev, " ");
             }
-            strcat(prev, word);
-            strcat(prev, " ");
+            
 
             // Get the next word
             word = strtok(NULL, " \t");

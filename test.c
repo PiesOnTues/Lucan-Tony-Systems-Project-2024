@@ -12,6 +12,7 @@
 
 
 int main(int argc, char *argv[]) {
-    double x  = 8;double y  = 3;printf("%f", x);  
+    function -> FUNC = true
+    double function
     return 0;
 }
