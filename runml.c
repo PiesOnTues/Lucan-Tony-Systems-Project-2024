@@ -1,81 +1,59 @@
-//  CITS2002 Project 1 2024
-//  Student1:   24214099   Lucan McDonald
-//  Student2:   24502509   Anthony Stewart
-//  Platform:   Apple b
-
-
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
 
-
-
 void processFile(FILE *file) {
-
-    // Initializes buffers to store each line from input and code for output
     char line[256];
     char code[1024];
-
-    
-    // Bool stores whether the word is part of a variable definition
     bool isVar = false;
     bool isStr = false;
 
-    // Read file line by line
     while (fgets(line, sizeof(line), file)) {
+        line[strcspn(line, "\n")] = '\0';  // Remove newline character
 
-        // Remove newline character
-        line[strcspn(line, "\n")] = '\0';
-
-        // Skip comments
-        if (strchr(line, '#') != NULL) {
+        if (strchr(line, '#') != NULL) {  // Skip comments
             continue;
         }
 
-        // Reset code buffer for each line
-        code[0] = '\0';
+        code[0] = '\0';  // Reset code buffer
 
-        // Split the line into words
-        char *word = strtok(line, " \t");
-
-        // create array to store each line
-        char *processedLine[1024];
-
-        // set index counter to 0
+        char *processedLine[256] = {0};  // Initialize array to NULL
         int i = 0;
 
-        // Process each word in the line
+        char *word = strtok(line, " \t");
         while (word != NULL) {
-            
-            // add each word in line to temporary array
-            processedLine[i++] = word; 
-                         
-            // Handles printing 
-            } if (strcmp(word, "print") == 0) {
+            if (i < 256) {
+                processedLine[i++] = word;  // Store word safely within bounds
+            }
+
+            // Handle printing
+            if (strcmp(word, "print") == 0) {
+                strcat(code, "printf(\"%f\", ");
                 isStr = true;
             } else if (isStr) {
-                strcat(code, "printf(\"%f\", ");
                 strcat(code, word);
+                strcat(code, ");");
+                isStr = false;
             } 
 
-            // Handle variable assignment 
-            if (strcmp(word, "<-") == 0) {
-                strcat(code, "double ");
-                strcat(code, processedLine[0]);  
-                strcat(code, " = ");
-                 // Mark that a variable assignment is found
-                isVar = true; 
+            // Handle variable assignment
+            else if (strcmp(word, "<-") == 0) {
+                if (i > 0) {
+                    strcat(code, "double ");
+                    strcat(code, processedLine[0]);  
+                    strcat(code, " = ");
+                    isVar = true;
+                }
             } else if (isVar) {
-                // Append the value to code aand reset isvars dawg
                 strcat(code, word);
                 strcat(code, ";");
                 isVar = false;
+            }
 
             // Get the next word
-            word = strtok(NULL, " ");
+            word = strtok(NULL, " \t");
         }
 
         // Print the processed line if code is not empty
@@ -90,33 +68,22 @@ void processFile(FILE *file) {
     }
 }
 
-
-
 int main(int argc, char *argv[]) {
-
-    // Check if the correct number of arguments is provided
-    if (argc != 2) {
-        fprintf(stderr, "usage: %s <input file> \n", argv[0]);
+    if (argc != 2) {  // Adjusted to expect only one argument
+        fprintf(stderr, "usage: %s <input file>\n", argv[0]);
         return 1;
     }
 
-    // File paths from arguments
     const char *file_in_path = argv[1];
-    const char *file_out_path = argv[2];
 
-    // Open input file
     FILE *file_in = fopen(file_in_path, "r");
     if (file_in == NULL) {
         perror("error opening input file");
         return 1;
     }
 
-    // Process the file!!
     processFile(file_in);
-
-    // Close the input file
     fclose(file_in);
 
     return 0;
 }
-
