@@ -41,9 +41,10 @@ void processFile(FILE *file) {
             if (strcmp(word, "<-") == 0) {
                 // Handle variable assignment
                 strcat(code, "double ");
-                strcat(code, prev);  // Use prev as it contains the variable name
+                strcat(code, prev);  
                 strcat(code, " = ");
-                isvar = true;  // Mark that a variable assignment is found
+                 // Mark that a variable assignment is found
+                isvar = true; 
             } else if (isvar) {
                 // Append the value to code and reset isvar
                 strcat(code, word);
