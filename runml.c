@@ -42,7 +42,7 @@ void processFile(FILE *file) {
         char *word = strtok(line, " \t");
 
         // create array to store each line
-        char *processedLine[64];
+        char *processedLine[1024];
 
         // set index counter to 0
         int i = 0;
@@ -54,7 +54,7 @@ void processFile(FILE *file) {
             processedLine[i++] = word; 
                          
             // Handles printing 
-            } if (strcmp(word, "print") == 0) {
+            if (strcmp(word, "print") == 0) {
                 isStr = true;
             } else if (isStr) {
                 strcat(code, "printf(\"%f\", ");
@@ -73,7 +73,7 @@ void processFile(FILE *file) {
                 strcat(code, word);
                 strcat(code, ";");
                 isVar = false;
-
+            } 
             // Get the next word
             word = strtok(NULL, " ");
         }
