@@ -21,14 +21,11 @@ void processFile(FILE *file) {
 
     
     // Bool stores whether the word is part of a variable definition
-    bool isvar = false;
-    bool isstr = false;
+    bool isVar = false;
+    bool isStr = false;
 
     // Read file line by line
     while (fgets(line, sizeof(line), file)) {
-
-        // Stores the previous words in the line
-        char prev[1024] = "";
 
         // Remove newline character
         line[strcspn(line, "\n")] = '\0';
@@ -67,12 +64,12 @@ void processFile(FILE *file) {
             // Handle variable assignment 
             if (strcmp(word, "<-") == 0) {
                 strcat(code, "double ");
-                strcat(code, &prev[index]);  
+                strcat(code, processedLine[0]);  
                 strcat(code, " = ");
                  // Mark that a variable assignment is found
-                isvar = true; 
-            } else if (isvar) {
-                // Append the value to code and reset isvars dawg
+                isVar = true; 
+            } else if (isVar) {
+                // Append the value to code aand reset isvars dawg
                 strcat(code, word);
                 strcat(code, ";");
                 isVar = false;
