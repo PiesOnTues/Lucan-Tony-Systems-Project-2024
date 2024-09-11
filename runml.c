@@ -60,7 +60,7 @@ void processFile(FILE *file) {
             } else if (strcmp(word, "print") == 0) {
                 strcat(code, "printf(\"%f\", ");
                 isstr = true;
-            } else if (isstr && isdigit(word[0])) {
+            } else if (isstr) {
                 strcat(code, word);
                 strcat(code, ");");
                 isstr = false;

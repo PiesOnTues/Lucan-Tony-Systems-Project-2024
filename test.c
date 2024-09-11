@@ -12,9 +12,9 @@
 
 
 int main(int argc, char *argv[]) {
-
-    double x = 2.5;
-    printf("%f", x);
+    double x = 7;
+    double y = 6;
+    printf("%f", x*y);
     return 0;
 }
 
