@@ -41,7 +41,6 @@ void processFile(FILE *file) {
             if (strcmp(word, "<-") == 0) {
                 // Handle variable assignment
                 strcat(code, "double ");
-                // Use prev as it contains the variable name
                 strcat(code, prev);  
                 strcat(code, " = ");
                  // Mark that a variable assignment is found
