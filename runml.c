@@ -3,13 +3,18 @@
 //  Student2:   24502509   Anthony Stewart
 //  Platform:   Apple b
 
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
 
+
+
 void processFile(FILE *file) {
+
     // Initializes buffers to store each line from input and code for output
     char line[256];
     char code[1024];
@@ -30,8 +35,10 @@ void processFile(FILE *file) {
         if (strchr(line, '#') != NULL) {
             continue;
         }
+
         // Reset code buffer for each line
         code[0] = '\0';
+
         // Split the line into words
         char *word = strtok(line, " \t");
 
@@ -54,6 +61,7 @@ void processFile(FILE *file) {
                 strcat(code, "printf(");
                 isstr = true;
             } else if (isstr && isdigit(word[0])) {
+                // closing bracket and colin on print statement
                 strcat(code, word);
                 strcat(code, ");");
                 isstr = false;
@@ -77,7 +85,10 @@ void processFile(FILE *file) {
     }
 }
 
+
+
 int main(int argc, char *argv[]) {
+    
     // Check if the correct number of arguments is provided
     if (argc != 2) {
         fprintf(stderr, "usage: %s <input file> \n", argv[0]);
