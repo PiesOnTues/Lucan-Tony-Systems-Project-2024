@@ -51,9 +51,9 @@ void processFile(FILE *file) {
                 isvar = false;
             // Handles printing 
             } else if (strcmp(word, "print") == 0) {
-                strcat(code, "printf(");
+                strcat(code, "printf(\"%f\", ");
                 isstr = true;
-            } else if (isstr && isdigit(word[0])) {
+            } else if (isstr) {
                 strcat(code, word);
                 strcat(code, ");");
                 isstr = false;
