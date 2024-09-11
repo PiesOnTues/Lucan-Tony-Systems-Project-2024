@@ -19,6 +19,7 @@ void processFile(FILE *file) {
     
     // Bool stores whether the word is part of a variable definition
     bool isvar = false;
+    bool isstr = false;
 
     // Read file line by line
     while (fgets(line, sizeof(line), file)) {
@@ -29,17 +30,15 @@ void processFile(FILE *file) {
         if (strchr(line, '#') != NULL) {
             continue;
         }
-        
         // Reset code buffer for each line
         code[0] = '\0';
-
         // Split the line into words
         char *word = strtok(line, " \t");
 
         // Process each word in the line
         while (word != NULL) {
+            // Handle variable assignment 
             if (strcmp(word, "<-") == 0) {
-                // Handle variable assignment
                 strcat(code, "double ");
                 strcat(code, prev);  
                 strcat(code, " = ");
@@ -50,6 +49,14 @@ void processFile(FILE *file) {
                 strcat(code, word);
                 strcat(code, ";");
                 isvar = false;
+            // Handles printing 
+            } else if (strcmp(word, "print") == 0) {
+                strcat(code, "printf(");
+                isstr = true;
+            } else if (isstr && isdigit(word[0])) {
+                strcat(code, word);
+                strcat(code, ");");
+                isstr = false;
             } else {
                 // Save the current word in prev for future reference
                 strcpy(prev, word);
@@ -72,8 +79,8 @@ void processFile(FILE *file) {
 
 int main(int argc, char *argv[]) {
     // Check if the correct number of arguments is provided
-    if (argc != 3) {
-        fprintf(stderr, "usage: %s <input file> <output file>\n", argv[0]);
+    if (argc != 2) {
+        fprintf(stderr, "usage: %s <input file> \n", argv[0]);
         return 1;
     }
 
@@ -88,7 +95,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // Process the file
+    // Process the file!!
     processFile(file_in);
 
     // Close the input file
@@ -96,3 +103,4 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
