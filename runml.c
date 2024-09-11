@@ -52,7 +52,7 @@ void processFile(FILE *file) {
                  // Mark that a variable assignment is found
                 isvar = true; 
             } else if (isvar) {
-                // Append the value to code and reset isvar
+                // Append the value to code and reset isvars dawg
                 strcat(code, word);
                 strcat(code, ";");
                 isvar = false;
