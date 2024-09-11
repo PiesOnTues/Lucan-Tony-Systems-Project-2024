@@ -19,8 +19,6 @@ void processFile(FILE *file) {
     char line[256];
     char code[1024];
 
-    // Stores the previous word
-    char prev[1024] = "";
     
     // Bool stores whether the word is part of a variable definition
     bool isvar = false;
@@ -28,6 +26,11 @@ void processFile(FILE *file) {
 
     // Read file line by line
     while (fgets(line, sizeof(line), file)) {
+
+        // Stores the previous words in the line
+        char prev[1024] = "";
+        int index = 0;
+
         // Remove newline character
         line[strcspn(line, "\n")] = '\0';
 
@@ -35,6 +38,7 @@ void processFile(FILE *file) {
         if (strchr(line, '#') != NULL) {
             continue;
         }
+
 
         // Reset code buffer for each line
         code[0] = '\0';
@@ -44,10 +48,11 @@ void processFile(FILE *file) {
 
         // Process each word in the line
         while (word != NULL) {
+            index++;
             // Handle variable assignment 
             if (strcmp(word, "<-") == 0) {
                 strcat(code, "double ");
-                strcat(code, prev);  
+                strcat(code, &prev[index]);  
                 strcat(code, " = ");
                  // Mark that a variable assignment is found
                 isvar = true; 
@@ -64,10 +69,10 @@ void processFile(FILE *file) {
                 strcat(code, word);
                 strcat(code, ");");
                 isstr = false;
-            } else {
-                // Save the current word in prev for future reference
-                strcpy(prev, word);
-            } 
+            }
+            strcat(prev, word);
+            strcat(prev, " ");
+
             // Get the next word
             word = strtok(NULL, " \t");
         }
