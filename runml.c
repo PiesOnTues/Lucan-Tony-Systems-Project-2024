@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
 
     const char *file_in_path = argv[1];
 
-    // Opens file containing code and then compiles it in processFile function 
+    // Opens .ml file and then compiles it in processFile function 
     FILE *file_in = fopen(file_in_path, "r");
     if (file_in == NULL) {
         perror("error opening input file");
