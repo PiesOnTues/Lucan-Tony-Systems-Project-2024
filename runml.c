@@ -9,7 +9,7 @@
 void processFile(FILE *file) {
     char line[LINELENGTH];
     char code[BUFSIZ];
-    bool isStr = false;
+
 
     // Remove newline character
     while (fgets(line, sizeof(line), file)) {
@@ -27,28 +27,54 @@ void processFile(FILE *file) {
         char *processedLine[LINELENGTH] = {0};  
         int i = 0;
 
-        char *word = strtok(line, " \t");
+        char *word = strtok(line, " ");
         while (word != NULL) {
             processedLine[i++] = word; 
-
+    
             if (strcmp(word, "print") == 0) {
+                
+                // appends printf function for float vals
                 strcat(code, "printf(\"%f\", ");
-                isStr = true;
-            } else if (isStr) {
-                strcat(code, word);
-                strcat(code, ");");
-                isStr = false;
-            } 
 
+                // appends first variable
+                word = strtok(NULL, " ");
+                if (word != NULL) {
+                    strcat(code, word);
+                }
+
+                // generates word after first variable
+                word = strtok(NULL, " ");
+                if (word == NULL) {
+                    strcat(code, ");");
+                    break;
+                }
+                
+                // determines whether this word is an operation
+                if (strcmp(word, "*") == 0) {
+                    // appends operation symbol, appends second variable and then closes the printf with a bracket
+                    if (word != NULL) {
+                        strcat(code, word);
+                    }
+                    word = strtok(NULL, " ");
+                    if (word != NULL) {
+                        strcat(code, word);
+                        strcat(code, ");");
+                    }
+                }
+
+            }
             // Handle variable assignment
             else if (strcmp(word, "<-") == 0) {
+                // Appends: double varaible name =
                 strcat(code, "double ");
                 strcat(code, processedLine[0]);  
                 strcat(code, " = ");
-                word = strtok(NULL, " \t");
+                // Generates and appends variables assigned value
+                word = strtok(NULL, " ");
                 strcat(code, word);
+                strcat(code, ";");
             } else {
-                word = strtok(NULL, " \t");
+                word = strtok(NULL, " ");
             }
         }
 
