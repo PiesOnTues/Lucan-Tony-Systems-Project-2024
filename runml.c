@@ -42,25 +42,18 @@ void processFile(FILE *file) {
                     strcat(code, word);
                 }
 
-                // generates word after first variable
+                // checks if this is a one variable/number print (e.g. print 3.5) and closes print with a bracket if it is 
                 word = strtok(NULL, " ");
                 if (word == NULL) {
                     strcat(code, ");");
                     break;
                 }
                 
-                // determines whether this word is an operation
-                if (strcmp(word, "*") == 0) {
-                    // appends operation symbol, appends second variable and then closes the printf with a bracket
-                    if (word != NULL) {
-                        strcat(code, word);
-                    }
-                    word = strtok(NULL, " ");
-                    if (word != NULL) {
-                        strcat(code, word);
-                        strcat(code, ");");
-                    }
-                }
+                // appends operation symbol, appends second variable and then closes the printf with a bracket
+                strcat(code, word);
+                word = strtok(NULL, " ");
+                strcat(code, word);
+                strcat(code, ");");
 
             }
             // Handle variable assignment
