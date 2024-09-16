@@ -9,7 +9,6 @@
 void processFile(FILE *file) {
     char line[LINELENGTH];
     char code[BUFSIZ];
-    bool isVar = false;
     bool isStr = false;
 
     // Remove newline character
@@ -43,20 +42,14 @@ void processFile(FILE *file) {
 
             // Handle variable assignment
             else if (strcmp(word, "<-") == 0) {
-                if (i > 0) {
-                    strcat(code, "double ");
-                    strcat(code, processedLine[0]);  
-                    strcat(code, " = ");
-                    isVar = true;
-                }
-            } else if (isVar) {
+                strcat(code, "double ");
+                strcat(code, processedLine[0]);  
+                strcat(code, " = ");
+                word = strtok(NULL, " \t");
                 strcat(code, word);
-                strcat(code, ";");
-                isVar = false;
+            } else {
+                word = strtok(NULL, " \t");
             }
-
-            // Get the next word
-            word = strtok(NULL, " \t");
         }
 
         // Print the processed line if code is not empty
