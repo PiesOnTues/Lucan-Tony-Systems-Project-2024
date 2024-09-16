@@ -7,15 +7,17 @@
 
 #define LINELENGTH 256
 
+// Variable defined oustide of main so it has global scope
 char compiledCode[BUFSIZ]; 
 
 void processFile(FILE *file) {
     char line[LINELENGTH];
-    
+
+   // Appends stock c code 
     char baseCode[] = "#include <stdio.h> \n int main() { ";
     strcat(compiledCode, baseCode);
 
-    // Remove newline character
+    // Reads file line by line
     while (fgets(line, sizeof(line), file)) {
         line[strcspn(line, "\n")] = '\0';  
 
@@ -24,10 +26,11 @@ void processFile(FILE *file) {
             continue;
         }
         
-        // Initialize array to NULL
+        // Initialize processedLine array which stores all previous code within the .ml file
         char *processedLine[LINELENGTH] = {0};  
         int i = 0;
 
+        // Tokenizes each line of code into individual words
         char *word = strtok(line, " ");
         while (word != NULL) {
             processedLine[i++] = word; 
@@ -44,14 +47,14 @@ void processFile(FILE *file) {
                     strcat(compiledCode, word);
                 }
 
-                // Checks if this is a one variable/number print (e.g. print 3.5) and closes print with a bracket if it is 
+                // Ends print statement if it is a one variable/number print (e.g. print 3.5) 
                 word = strtok(NULL, " ");
                 if (word == NULL) {
                     strcat(compiledCode, ");");
                     break;
                 }
-                
-                // Appends operation symbol, appends second variable and then closes the printf with a bracket
+            
+                // If it is a operation print it appends the operation symbol, appends second variable and then closes the print
                 strcat(compiledCode, word);
                 word = strtok(NULL, " ");
                 strcat(compiledCode, word);
