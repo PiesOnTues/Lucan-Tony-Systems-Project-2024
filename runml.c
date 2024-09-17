@@ -106,9 +106,9 @@ int main(int argc, char *argv[]) {
     // The compiled code is stored in a char which is then written to a new temporary c file
     char tempC[] = "XXXXXX.c";
     mkstemp(tempC);
-    FILE *file = fopen(tempC, "w");
-    fprintf(file, "%s", compiledCode);
-    fclose(file);
+    FILE *file_out = fopen(tempC, "w");
+    fprintf(file_out, "%s", compiledCode);
+    fclose(file_out);
 
     // The c file is then compiled by executing a compilation command (gcc -o) using the system() function
     char tempExec[] = "XXXXXX";
