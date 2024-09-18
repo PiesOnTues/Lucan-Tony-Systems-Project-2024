@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
     fclose(file_in);
 
     // The compiled code is stored in a char which is then written to a new temporary c file
-    char tempC[] = "XXXXXX.c";
+    char tempC[] = "temp.c";
     mkstemp(tempC);
     FILE *file_out = fopen(tempC, "w");
     fprintf(file_out, "%s", compiledCode);
