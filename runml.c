@@ -7,7 +7,6 @@
 
 #define LINELENGTH 256
 
-// shmungus
 // Variable defined oustide of main so it has global scope
 char compiledCode[BUFSIZ]; 
 
@@ -28,7 +27,7 @@ void processFile(FILE *file) {
         }
         
         // Initialize processedLine array which stores all previous code within the .ml file
-        char *processedLine[LINELENGTH] = {0};  
+        char *processedLine[LINELENGTH] = {0};
         int i = 0;
 
         // Tokenizes each line of code into individual words
@@ -36,6 +35,11 @@ void processFile(FILE *file) {
         while (word != NULL) {
             processedLine[i++] = word; 
 
+            // checks if the current token indicates the beginning of a function
+            if (strcmp(word, "function") == 0) {
+                
+
+            }
             // Handles print statements
             if (strcmp(word, "print") == 0) {
                 
@@ -75,6 +79,7 @@ void processFile(FILE *file) {
                 word = strtok(NULL, " ");
                 strcat(compiledCode, word);
                 strcat(compiledCode, ";");
+
             // If the token isn't recognized it will simply generate the next word
             } else {
                 word = strtok(NULL, " ");
@@ -85,6 +90,11 @@ void processFile(FILE *file) {
         strcat(compiledCode, "\n");
     }
     strcat(compiledCode, "return 0; }");
+}
+
+char checkFunction() {
+
+    
 }
 
 int main(int argc, char *argv[]) {
