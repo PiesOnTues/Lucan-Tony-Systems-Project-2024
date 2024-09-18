@@ -11,6 +11,7 @@
 char compiledCode[BUFSIZ] = ""; 
 
 void processLine(char *line) {
+    char prev[50];
 
     // Tokenizes each line of code into individual words
     char *word = strtok(line, " ");
@@ -42,7 +43,7 @@ void processLine(char *line) {
 
         }
 
-        // Handle variable assignment
+                // Handle variable assignment
         else if (strcmp(word, "<-") == 0) {
 
             // Appends: double varaible name =
@@ -56,7 +57,7 @@ void processLine(char *line) {
             strcat(compiledCode, ";");
             // If the token isn't recognized it will simply generate the next word
         } else {
-            char prev = *word;
+            strncpy(prev, word, sizeof(prev) - 1);
             word = strtok(NULL, " ");
         }
     }
