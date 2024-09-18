@@ -7,6 +7,7 @@
 
 #define LINELENGTH 256
 
+// shmungus
 // Variable defined oustide of main so it has global scope
 char compiledCode[BUFSIZ]; 
 
