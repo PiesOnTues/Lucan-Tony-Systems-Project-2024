@@ -10,6 +10,23 @@
 // Variable defined oustide of main so it has global scope
 char compiledCode[BUFSIZ] = ""; 
 
+int hasDec(double value) {
+    // Convert the double to a string
+    char buffer[50];
+    snprintf(buffer, sizeof(buffer), "%.10f", value);
+    
+    // Find the decimal point in the string
+    char *decimal_point = strchr(buffer, '.');
+    
+    // Check the characters after the decimal point for a non-zero value
+    for (char *p = decimal_point + 1; *p; p++) {
+        if (*p != '0') {
+            return 1; 
+        }
+    }
+    return 0; 
+}
+
 char processLine(char *line) {
 
     // Stores previous word
@@ -28,30 +45,30 @@ char processLine(char *line) {
         if (strcmp(word, "print") == 0) {
                     
             // Appends printf function for float vals
-            strcat(compiledLine, "printf(\"%f\", ");
+            strcat(compiledCode, "printf(\"%f\", ");
 
             // Appends first variable
             word = strtok(NULL, " ");
             if (word != NULL) {
-                strcat(compiledLine, word);
+                strcat(compiledCode, word);
             }
 
             // Ends print statement if it is a one variable/number print (e.g. print 3.5) 
             word = strtok(NULL, " ");
             if (word == NULL) {
-                strcat(compiledLine, ");");
+                strcat(compiledCode, ");");
                 break;
             }
                 
             // If it is a operation print it appends the operation symbol, appends second variable and then closes the print
-            strcat(compiledLine, word);
+            strcat(compiledCode, word);
             word = strtok(NULL, " ");
-            strcat(compiledLine, word);
-            strcat(compiledLine, ");");
+            strcat(compiledCode, word);
+            strcat(compiledCode, ");");
 
         }
 
-        // Handles variable assignment
+                // Handle variable assignment
         else if (strcmp(word, "<-") == 0) {
 
             // Appends: "double" + varaible name + "="
@@ -168,7 +185,7 @@ int main(int argc, char *argv[]) {
     char tempExec[] = "XXXXXX";
     char compCmd[LINELENGTH];
     mkstemp(tempExec);
-    snprintf(compCmd, LINELENGTH, "gcc -o %s %s", tempExec, tempC);
+    snprintf(compCmd, LINELENGTH, " cc -std=c11 -Wall -Werror -o %s %s", tempExec, tempC);
     system(compCmd);
 
     // The resulting exec file that is created is then executed
