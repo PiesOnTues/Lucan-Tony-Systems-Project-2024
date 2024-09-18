@@ -88,7 +88,7 @@ char processLine(char *line) {
         // Handles function definitions
         else if (strcmp(word, "function") == 0) {
 
-            // Contcatenates "double" + function name
+            // Contcatanates "double" + function name
             strcat(compiledLine, "double ");
             word = strtok(NULL, " ");
             strcat(compiledLine, word);  
