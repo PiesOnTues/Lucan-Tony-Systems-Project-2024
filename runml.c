@@ -7,9 +7,63 @@
 
 #define LINELENGTH 256
 
-// shmungus
 // Variable defined oustide of main so it has global scope
-char compiledCode[BUFSIZ]; 
+char compiledCode[BUFSIZ] = ""; 
+char prev[50];
+
+void processLine(char *line) {
+
+    // Tokenizes each line of code into individual words
+    char *word = strtok(line, " ");
+    while (word != NULL) {
+        // Handles print statements
+        if (strcmp(word, "print") == 0) {
+                    
+            // Appends printf function for float vals
+            strcat(compiledCode, "printf(\"%f\", ");
+
+            // Appends first variable
+            word = strtok(NULL, " ");
+            if (word != NULL) {
+                strcat(compiledCode, word);
+            }
+
+            // Ends print statement if it is a one variable/number print (e.g. print 3.5) 
+            word = strtok(NULL, " ");
+            if (word == NULL) {
+                strcat(compiledCode, ");");
+                break;
+            }
+                
+            // If it is a operation print it appends the operation symbol, appends second variable and then closes the print
+            strcat(compiledCode, word);
+            word = strtok(NULL, " ");
+            strcat(compiledCode, word);
+            strcat(compiledCode, ");");
+
+        }
+
+        // Handle variable assignment
+        else if (strcmp(word, "<-") == 0) {
+
+            // Appends: double varaible name =
+            strcat(compiledCode, "double ");
+            strcat(compiledCode, prev);  
+            strcat(compiledCode, " = ");
+
+            // Generates and appends variables assigned value
+            word = strtok(NULL, " ");
+            strcat(compiledCode, word);
+            strcat(compiledCode, ";");
+            // If the token isn't recognized it will simply generate the next word
+        } else {
+            strncpy(prev, word, sizeof(prev) - 1);
+            word = strtok(NULL, " ");
+        }
+    }
+     // Adds \n for readability
+    strcat(compiledCode, "\n");
+}
 
 void processFile(FILE *file) {
     char line[LINELENGTH];
@@ -31,58 +85,7 @@ void processFile(FILE *file) {
         char *processedLine[LINELENGTH] = {0};  
         int i = 0;
 
-        // Tokenizes each line of code into individual words
-        char *word = strtok(line, " ");
-        while (word != NULL) {
-            processedLine[i++] = word; 
-
-            // Handles print statements
-            if (strcmp(word, "print") == 0) {
-                
-                // Appends printf function for float vals
-                strcat(compiledCode, "printf(\"%f\", ");
-
-                // Appends first variable
-                word = strtok(NULL, " ");
-                if (word != NULL) {
-                    strcat(compiledCode, word);
-                }
-
-                // Ends print statement if it is a one variable/number print (e.g. print 3.5) 
-                word = strtok(NULL, " ");
-                if (word == NULL) {
-                    strcat(compiledCode, ");");
-                    break;
-                }
-            
-                // If it is a operation print it appends the operation symbol, appends second variable and then closes the print
-                strcat(compiledCode, word);
-                word = strtok(NULL, " ");
-                strcat(compiledCode, word);
-                strcat(compiledCode, ");");
-
-            }
-
-            // Handle variable assignment
-            else if (strcmp(word, "<-") == 0) {
-
-                // Appends: double varaible name =
-                strcat(compiledCode, "double ");
-                strcat(compiledCode, processedLine[0]);  
-                strcat(compiledCode, " = ");
-
-                // Generates and appends variables assigned value
-                word = strtok(NULL, " ");
-                strcat(compiledCode, word);
-                strcat(compiledCode, ";");
-            // If the token isn't recognized it will simply generate the next word
-            } else {
-                word = strtok(NULL, " ");
-            }
-        }
-
-        // Adds \n for readability
-        strcat(compiledCode, "\n");
+        processLine(line);
     }
     strcat(compiledCode, "return 0; }");
 }
@@ -124,8 +127,8 @@ int main(int argc, char *argv[]) {
     system(execCmd);
 
     // Deletes the temporary c and exec files
-    unlink(tempC);
-    unlink(tempExec);
+    remove(tempC);
+    remove(tempExec);
 
     return 0;
 }
