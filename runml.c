@@ -8,38 +8,19 @@
 #define LINELENGTH 256
 
 // Variable defined oustide of main so it has global scope
-char compiledCode[BUFSIZ]; 
+char compiledCode[BUFSIZ] = ""; 
+char prev[50] = ;
 
-void processFile(FILE *file) {
-    char line[LINELENGTH];
+void processLine(char *line) {
 
-   // Appends stock c code 
-    char baseCode[] = "#include <stdio.h> \n int main() { ";
-    strcat(compiledCode, baseCode);
-
-    // Reads file line by line
-    while (fgets(line, sizeof(line), file)) {
-        line[strcspn(line, "\n")] = '\0';  
-
-        // Skip comments
-        if (strchr(line, '#') != NULL) {  
-            continue;
-        }
-        
-        // Initialize processedLine array which stores all previous code within the .ml file
-        char *processedLine[LINELENGTH] = {0};  
-        int i = 0;
-
-        // Tokenizes each line of code into individual words
-        char *word = strtok(line, " ");
-        while (word != NULL) {
-            processedLine[i++] = word; 
-
-            // Handles print statements
-            if (strcmp(word, "print") == 0) {
-                
-                // Appends printf function for float vals
-                strcat(compiledCode, "printf(\"%f\", ");
+    // Tokenizes each line of code into individual words
+    char *word = strtok(line, " ");
+    while (word != NULL) {
+        // Handles print statements
+        if (strcmp(word, "print") == 0) {
+                    
+            // Appends printf function for float vals
+            strcat(compiledCode, "printf(\"%f\", ");
 
             // Appends first variable
             word = strtok(NULL, " ");
@@ -70,13 +51,13 @@ void processFile(FILE *file) {
             strcat(compiledCode, prev);  
             strcat(compiledCode, " = ");
 
-                // Generates and appends variables assigned value
-                word = strtok(NULL, " ");
-                strcat(compiledCode, word);
-                strcat(compiledCode, ";");
+            // Generates and appends variables assigned value
+            word = strtok(NULL, " ");
+            strcat(compiledCode, word);
+            strcat(compiledCode, ";");
             // If the token isn't recognized it will simply generate the next word
         } else {
-            strncpy(prev, word, sizeof(prev) - 1);
+            char prev = *word;
             word = strtok(NULL, " ");
         }
     }
@@ -107,11 +88,6 @@ void processFile(FILE *file) {
         processLine(line);
     }
     strcat(compiledCode, "return 0; }");
-}
-
-char checkFunction() {
-
-    
 }
 
 int main(int argc, char *argv[]) {
