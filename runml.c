@@ -9,7 +9,6 @@
 
 // Variable defined oustide of main so it has global scope
 char compiledCode[BUFSIZ] = ""; 
-char prev[50] = ;
 
 void processLine(char *line) {
 
