@@ -27,67 +27,103 @@ int hasDec(double value) {
     return 0; 
 }
 
-void processLine(char *line) {
+char processLine(char *line) {
+
+    // Stores previous word
     char prev[50];
+
+    // stores the processed line as a whole
+    char compiledLine[100];
 
     // Tokenizes each line of code into individual words
     char *word = strtok(line, " ");
+
+    // Loops through the line
     while (word != NULL) {
+
         // Handles print statements
         if (strcmp(word, "print") == 0) {
-            char expression[50] = "";
-
-            
+                    
+            // Appends printf function for float vals
+            strcat(compiledCode, "printf(\"%f\", ");
 
             // Appends first variable
             word = strtok(NULL, " ");
-            strcat(expression, word);
+            if (word != NULL) {
+                strcat(compiledCode, word);
+            }
 
             // Ends print statement if it is a one variable/number print (e.g. print 3.5) 
             word = strtok(NULL, " ");
-            if (word != NULL) {
-                // If it is a operation print it appends the operation symbol, appends second variable and then closes the print
-                strcat(expression, word);
-                word = strtok(NULL, " ");
-                strcat(expression, word);
+            if (word == NULL) {
+                strcat(compiledCode, ");");
+                break;
             }
-    
-            strcat(compiledCode, "printf(\"%f\", ");
-    
-        
-            strcat(compiledCode, expression);
+                
+            // If it is a operation print it appends the operation symbol, appends second variable and then closes the print
+            strcat(compiledCode, word);
+            word = strtok(NULL, " ");
+            strcat(compiledCode, word);
             strcat(compiledCode, ");");
-            
-            
-            
+
         }
 
-        // Handle variable assignment
+                // Handle variable assignment
         else if (strcmp(word, "<-") == 0) {
 
-            // Appends: double varaible name =
-            strcat(compiledCode, "double ");
-            strcat(compiledCode, prev);  
-            strcat(compiledCode, " = ");
+            // Appends: "double" + varaible name + "="
+            strcat(compiledLine, "double ");
+            strcat(compiledLine, prev);  
+            strcat(compiledLine, " = ");
 
             // Generates and appends variables assigned value
             word = strtok(NULL, " ");
-            strcat(compiledCode, word);
-            strcat(compiledCode, ";");
+            strcat(compiledLine, word);
+            strcat(compiledLine, ";");
+
             // If the token isn't recognized it will simply generate the next word
-        } else {
+        
+        }
+        
+        // Handles function definitions
+        else if (strcmp(word, "function") == 0) {
+
+            // Contcatenates "double" + function name
+            strcat(compiledLine, "double ");
+            word = strtok(NULL, " ");
+            strcat(compiledLine, word);  
+            strcat(compiledLine, "(");
+
+            // Concatenates the parameters of the function
+            while (strtok != NULL) {
+                word = strtok(NULL, " ");
+                strcat(compiledLine, "double ");
+                strcat(compiledLine, word); 
+                strcat(compiledLine, " ");
+            }
+
+            // adds closing characters
+            strcat(compiledLine, ");");
+
+        }
+
+        // updates previous word and moves to next word
+        else {
             strncpy(prev, word, sizeof(prev) - 1);
             word = strtok(NULL, " ");
         }
+
+        return compiledLine;
+
     }
      // Adds \n for readability
-    strcat(compiledCode, "\n");
+    strcat(compiledLine, "\n");
 }
 
 void processFile(FILE *file) {
     char line[LINELENGTH];
 
-   // Appends stock c code 
+    // Appends stock c code 
     char baseCode[] = "#include <stdio.h> \n int main() { ";
     strcat(compiledCode, baseCode);
 
@@ -98,15 +134,27 @@ void processFile(FILE *file) {
         // Skip comments
         if (strchr(line, '#') != NULL) {  
             continue;
+        } else if (strchr(line, 'function') != NULL) {
+            processFunction(line);
         }
         
-        // Initialize processedLine array which stores all previous code within the .ml file
-        char *processedLine[LINELENGTH] = {0};  
+        // Initialize processedData array which stores all previous code within the .ml file
+        char *processedData[LINELENGTH] = {0};  
         int i = 0;
 
         processLine(line);
     }
-    strcat(compiledCode, "return 0; }");
+
+    strcat(baseCode, "return 0; }");
+
+}
+
+// Processes a single function
+char processFunction(char *line) {
+
+    // Define name and perameters
+    char compiledFunc = "";
+    processLine(*line);
 }
 
 int main(int argc, char *argv[]) {
