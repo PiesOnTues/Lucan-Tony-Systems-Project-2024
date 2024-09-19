@@ -68,7 +68,7 @@ char* FunctionHeader(char *line) {
 bool isFunc(const char *funcName) {
     // checks if item is in the list
     for (int i = 0; i < funcIndex; i++) {
-        if (strstr(funcArr[i], funcName)) {
+        if (strstr(funcArr[i], funcName) {
             return true;
         }
     }
