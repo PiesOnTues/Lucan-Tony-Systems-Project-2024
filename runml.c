@@ -132,6 +132,8 @@ char *processLine(char *line) {
     return compiledLine;
 }
 
+
+
 // Joins multiple compiled functions into one consolidated output string
 void processFile(FILE *file) {
 
@@ -185,6 +187,7 @@ void processFile(FILE *file) {
 
 
 
+//main
 int main(int argc, char *argv[]) {
 
     // tony put a comment here
