@@ -3,16 +3,12 @@
 //  Student2:   24502509   Anthony Stewart
 //  Platform:   Apple
 
-
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
 #include <unistd.h>
-
-
 
 #define LINELENGTH 256
 
