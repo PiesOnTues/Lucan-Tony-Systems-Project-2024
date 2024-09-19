@@ -1,5 +1,3 @@
 #include <stdio.h> 
- int main() { double x = 8;
-double y = 3;
-printf("%f", x*y);
-return 0; }
+ double printsum(double a, b) {
+ }int main() { return 0; }

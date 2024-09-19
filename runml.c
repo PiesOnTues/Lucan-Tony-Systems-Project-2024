@@ -10,10 +10,14 @@
 void processFunction(char *line);
 
 // Variable defined outside of main so it has global scope
-char compiledCode[BUFSIZ] = ""; 
+char compiledCode[BUFSIZ] = "";
+// mainCode stores all code within main function 
+char mainCode[BUFSIZ];
+// compiledFunc stores all code within functions 
+char compiledFunc[BUFSIZ];
 
 // Tells us if we are in a function or not
-int inFunc = 0;
+bool inFunc = false;
 
 // processes a single line of ml
 char *processLine(char *line) {
@@ -70,7 +74,6 @@ char *processLine(char *line) {
             word = strtok(NULL, " ");
             strcat(compiledLine, word);
             strcat(compiledLine, ";\n");
-        
         }
         // If the token isn't recognized it will simply generate the next word
         else {
@@ -84,27 +87,40 @@ char *processLine(char *line) {
 
 // Joins multiple functions into one consolidated file
 void processFile(FILE *file) {
-
-    // mainCode stores all code within main function 
-    char mainCode[BUFSIZ];
     char line[LINELENGTH];
+
+    // Adds headers
+    strcat(compiledCode, "#include <stdio.h> \n ");
 
     // Reads file line by line
     while (fgets(line, sizeof(line), file)) {
         line[strcspn(line, "\n")] = '\0';  
-
+        printf("%s\n", line);
         // Skip comments
         if (strchr(line, '#') != NULL) {  
             continue;
-        } else if (strstr(line, "function") != NULL) {
-            inFunc = 1; 
+        } 
+        // Checks line for the word "function" then processes the function declaration and appends to compiledFunc
+        else if (strstr(line, "function") != NULL) {
+            inFunc = true;
             processFunction(line);
+        } 
+        // If the line(s) after the function don't contain either a tab or a blank space at the beginning 
+        // We can assume that those lines aren't part of the function and that the function has ended
+        // Once the function has ended we append the compiled function to the compiled code
+        else if ((inFunc == true) && (line[0] != ' ' || line[0] != '\t')) {
+            inFunc = false;
+            strcat(compiledCode, compiledFunc);
+            strcat(compiledCode, " }");
+        } 
+        // If we are inside a function we simply process the lines and then append them to the funciton
+        else if (inFunc == true) { 
+            strcat(compiledFunc, processLine(line));
         }
         strcat(mainCode, processLine(line));
     }
     // Appends stock C code 
-    char baseCode[] = "#include <stdio.h> \n int main() { ";
-    strcat(compiledCode, baseCode);
+    strcat(compiledCode, "int main() { ");
     // Appends all code within main 
     strcat(compiledCode, mainCode);
     strcat(compiledCode, "return 0; }\n");
@@ -112,9 +128,7 @@ void processFile(FILE *file) {
 
 // Processes a single function
 void processFunction(char *line) {
-    printf("%s", line);
-    // Stores the processed function body
-    char compiledFunc[200] = "";
+    compiledFunc[0] = '\0';
 
     // Assumes that the first call occurs with the function definition line
     char *word = strtok(line, " ");
@@ -138,24 +152,6 @@ void processFunction(char *line) {
 
     // Adds closing characters
     strcat(compiledFunc, ") {\n");
-
-    // Adds function definition to compiled code
-    strcat(compiledCode, compiledFunc);
-
-    // process the logical content of the function
-    while (inFunc) {
-
-        // Assume that the next line is valid (as the end of the function cannot be the end of the file i.e. it must be called)
-        // Checks if line starts with tab character or indent (if we are still in the function scope)
-        if (line[0] != '\t' && line[0] != ' ') {
-            // Reset inFunc flag when the end of the function is reached
-            inFunc = 0;
-            break;
-        }
-
-        // Process the line inside the function
-        processLine(line);
-    }
 }
 
 int main(int argc, char *argv[]) {
