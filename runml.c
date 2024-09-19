@@ -18,6 +18,10 @@ char compiledCode[BUFSIZ] = "";
 char mainCode[BUFSIZ];
 // compiledFunc stores all code under non-main functions
 char funcCode[BUFSIZ];
+// funcList stores the name of each new function when it is compiled
+char funcArr[50][100];
+// funcIndex stores the current index for referencing the funcList array
+int funcIndex = 0;
 // Tells us if we are in a function or not
 bool inFunc = false;
 
@@ -25,7 +29,7 @@ bool inFunc = false;
 
 // Processes a single function definition line
 char* FunctionHeader(char *line) {
-
+    
     static char funcDef[BUFSIZ];
 
     // Assumes that the first call occurs with the function definition line
@@ -36,6 +40,9 @@ char* FunctionHeader(char *line) {
     strcat(funcDef, "double ");
     strcat(funcDef, word);  // Function name
     strcat(funcDef, "(");
+
+    // stores function name in funcName array, and iterates the indexer
+    strcpy(funcArr[funcIndex++], word);
 
     // Process function parameters
     while ((word = strtok(NULL, " ")) != NULL) {
@@ -59,6 +66,7 @@ char* FunctionHeader(char *line) {
 
 // processes a single line of ml
 char *processLine(char *line) {
+
     // Stores previous word
     char prev[50];
 
@@ -131,6 +139,7 @@ char *processLine(char *line) {
 // Joins multiple compiled functions into one consolidated output string
 void processFile(FILE *file) {
 
+    // defines line character, setting max
     char line[LINELENGTH];
 
     // Adds lines to import C11 standard libraries
