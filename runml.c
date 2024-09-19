@@ -79,6 +79,8 @@ bool isFunc(const char *funcName) {
 char *processLine(char *line) {
     // Stores previous word
     char prev[50];
+    
+    // Copies line for later use
     char line1[50];
     strcpy(line1, line);
 
@@ -103,7 +105,7 @@ char *processLine(char *line) {
         if (strcmp(word, "print") == 0) {
                     
             // concatenates printf function for float vals
-            strcat(compiledLine, "printf(\"%f\", ");
+            strcat(compiledLine, "printf(\"%f\\n\", ");
 
             // concatenates first variable
             word = strtok(NULL, " \t");
@@ -184,7 +186,7 @@ void processFile(FILE *file) {
             // reset flag and add closing chars if the end of the function has been reached
             else {
                 inFunc = false;
-                strcat(funcCode, "\treturn 0; }\n");
+                strcat(funcCode, "\treturn 0;\n }\n");
                 strcat(mainCode, processLine(line));
             }
         } 

@@ -1,7 +1,9 @@
 #include <stdio.h>
 double printsum(double a, double b) { 
-printf("%f", a+b);
-return 0; }
+	printf("%f\n", a+b);
+	return 0;
+ }
 int main() { 
 printsum (12, 6);
-return 0; }
+return 0;
+ }
