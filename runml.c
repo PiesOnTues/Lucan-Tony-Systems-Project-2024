@@ -12,46 +12,47 @@
 
 #define LINELENGTH 256
 
-// Variable defined outside of main so it has global scope
+// compiledCode globally stores the summation of all function code and maincode
 char compiledCode[BUFSIZ] = "";
-// mainCode stores all code within main function 
+// mainCode stores code of the main function
 char mainCode[BUFSIZ];
-// compiledFunc stores all code within functions 
-char compiledFunc[BUFSIZ];
+// compiledFunc stores all code under non-main functions
+char funcCode[BUFSIZ];
 // Tells us if we are in a function or not
 bool inFunc = false;
 
 
 
-// Processes a single function
-void processFunction(char *line) {
+// Processes a single function definition line
+char FunctionHeader(char *line) {
 
-    // reset the compiledFunc variable to a null byte for each call
-    compiledFunc[0] = '\0';
+    char funcDef[BUFSIZ];
 
     // Assumes that the first call occurs with the function definition line
     char *word = strtok(line, " ");
     
     // Skip "function" keyword
     word = strtok(NULL, " ");
-    strcat(compiledFunc, "double ");
-    strcat(compiledFunc, word);  // Function name
-    strcat(compiledFunc, "(");
+    strcat(funcDef, "double ");
+    strcat(funcDef, word);  // Function name
+    strcat(funcDef, "(");
 
     // Process function parameters
     while ((word = strtok(NULL, " ")) != NULL) {
-        strcat(compiledFunc, "double ");
-        strcat(compiledFunc, word); // perameter name
-        strcat(compiledFunc, ", ");
+        strcat(funcDef, "double ");
+        strcat(funcDef, word); // perameter name
+        strcat(funcDef, ", ");
     }
 
     // Removes trailing comma
-    if (strlen(compiledFunc) > 2) {
-        compiledFunc[strlen(compiledFunc) - 2] = '\0';
+    if (strlen(funcDef) > 2) {
+        funcDef[strlen(funcDef) - 2] = '\0';
     }
 
     // Adds closing characters
-    strcat(compiledFunc, ") { \n");
+    strcat(funcDef, ") { \n");
+
+    return funcDef;
 }
 
 
@@ -64,6 +65,7 @@ char *processLine(char *line) {
 
     // Stores the processed line as a whole
     static char compiledLine[LINELENGTH];
+
     // Initialize to empty
     compiledLine[0] = '\0'; 
 
@@ -122,6 +124,7 @@ char *processLine(char *line) {
     }
 
     return compiledLine;
+
 }
 
 
@@ -131,12 +134,13 @@ void processFile(FILE *file) {
 
     char line[LINELENGTH];
 
-    // Adds headers
-    strcat(compiledCode, "#include <stdio.h> \n ");
+    // Adds lines to import C11 standard libraries
+    strcat(compiledCode, "#include <stdio.h>\n");
 
     // Reads file line by line
     while (fgets(line, sizeof(line), file)) {
 
+        // strips newline character from line
         line[strcspn(line, "\n")] = '\0';  
         printf("%s\n", line);
 
@@ -145,29 +149,41 @@ void processFile(FILE *file) {
             continue;
         } 
 
-        // Checks line for the word "function" then processes the function declaration and concatenates to compiledFunc
-        else if (strstr(line, "function") != NULL) {
-            inFunc = true;
-            processFunction(line);
-        } 
+        // checks if we are in main or in a function
+        if (inFunc) {
+            // Checks that we are still in a function (by checking if lines are indented)
+            if (line[0] == ' ' || line[0] == '\t') {
+                strcat(funcCode, processLine(line));
+            }
 
-        // If the line(s) after the function don't contain either a tab or a blank space at the beginning 
-        // We can assume that those lines aren't part of the function and that the function has ended
-        // Once the function has ended we append the compiled function to the compiled code
-        else if ((inFunc == true) && (line[0] != ' ' || line[0] != '\t')) {
-            inFunc = false;
-            strcat(compiledCode, compiledFunc);
-            strcat(compiledCode, " }\n");
+            // reset flag and add closing chars if the end of the function has been reached
+            else {
+                inFunc = false;
+                strcat(funcCode, "};\n");
+            }
         } 
-
-        // If we are inside a function we simply process the lines and then append them to the funciton
-        else if (inFunc == true) { 
-            strcat(compiledFunc, processLine(line));
+        
+        else {
+            // checks if we have hit a function definition line
+            if (strstr(line, "function") != NULL) {
+                // sets inFunc flag to true to indicate that we should compile code to the funcCode variable
+                inFunc = true;
+                strcat(funcCode, FunctionHeader(line));
+            } 
+            
+            // if we are not in a function code gets compiled to mainCode
+            else {
+                strcat(mainCode, processLine(line));
+            }
         }
-        strcat(mainCode, processLine(line));
     }
 
-    // concatenates stock C code 
+    // the next few lines set up the structure of the fully compiled output file
+
+    // adds code of non-main functions
+    strcat(compiledCode, funcCode);
+
+    // opening lines of main function
     strcat(compiledCode, "int main() { \n");
 
     // concatenates all code within main 
