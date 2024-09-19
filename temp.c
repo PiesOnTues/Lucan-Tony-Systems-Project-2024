@@ -1,3 +1,5 @@
 #include <stdio.h> 
- double printsum(double a, double b) {
- }int main() { return 0; }
+ double printsum(double a, double b) { 
+ }
+int main() { 
+return 0; }

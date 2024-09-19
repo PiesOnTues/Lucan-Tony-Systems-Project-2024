@@ -51,7 +51,7 @@ void processFunction(char *line) {
     }
 
     // Adds closing characters
-    strcat(compiledFunc, ") {\n");
+    strcat(compiledFunc, ") { \n");
 }
 
 
@@ -157,7 +157,7 @@ void processFile(FILE *file) {
         else if ((inFunc == true) && (line[0] != ' ' || line[0] != '\t')) {
             inFunc = false;
             strcat(compiledCode, compiledFunc);
-            strcat(compiledCode, " }");
+            strcat(compiledCode, " }\n");
         } 
 
         // If we are inside a function we simply process the lines and then append them to the funciton
@@ -168,7 +168,7 @@ void processFile(FILE *file) {
     }
 
     // concatenates stock C code 
-    strcat(compiledCode, "int main() { ");
+    strcat(compiledCode, "int main() { \n");
 
     // concatenates all code within main 
     strcat(compiledCode, mainCode);
