@@ -142,15 +142,13 @@ void processFunction(char *line) {
     // Adds function definition to compiled code
     strcat(compiledCode, compiledFunc);
 
-    // Process the function body line by line
-    while (fgets(line, LINELENGTH, stdin)) {
-        // Check end of stdin to prevent infinite loop
-        if (feof(stdin)) {
-            break;
-        }
+    // process the logical content of the function
+    while (inFunc) {
+
+        // Assume that the next line is valid (as the end of the function cannot be the end of the file i.e. it must be called)
         // Checks if line starts with tab character or indent (if we are still in the function scope)
         if (line[0] != '\t' && line[0] != ' ') {
-            // Reset inFunc flag when end of function is reached
+            // Reset inFunc flag when the end of the function is reached
             inFunc = 0;
             break;
         }
