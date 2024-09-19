@@ -80,6 +80,8 @@ char *processLine(char *line) {
     printf("%s\n", line);
     // Stores previous word
     char prev[50];
+    char line1[50];
+    strcpy(line1, line);
 
     // Stores the processed line as a whole
     static char compiledLine[LINELENGTH];
@@ -94,8 +96,8 @@ char *processLine(char *line) {
     while (word != NULL) {
 
         if (isFunc(word) == true) {
-            strcat(compiledLine, line);
-            strcat(compiledLine, "\n");
+            strcat(compiledLine, line1);
+            strcat(compiledLine, ";\n");
         }
 
         // Handles print statements
