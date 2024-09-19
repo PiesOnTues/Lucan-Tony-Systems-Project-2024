@@ -3,8 +3,6 @@
 //  Student2:   24502509   Anthony Stewart
 //  Platform:   Apple
 
-
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -12,21 +10,14 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-
-
 #define LINELENGTH 256
-
-
 
 // Variable defined outside of main so it has global scope
 char compiledCode[BUFSIZ] = "";
-
 // mainCode stores all code within main function 
 char mainCode[BUFSIZ];
-
 // compiledFunc stores all code within functions 
 char compiledFunc[BUFSIZ];
-
 // Tells us if we are in a function or not
 bool inFunc = false;
 
@@ -133,6 +124,8 @@ char *processLine(char *line) {
     return compiledLine;
 }
 
+
+
 // Joins multiple compiled functions into one consolidated output string
 void processFile(FILE *file) {
 
@@ -186,6 +179,7 @@ void processFile(FILE *file) {
 
 
 
+//main
 int main(int argc, char *argv[]) {
 
     // tony put a comment here
