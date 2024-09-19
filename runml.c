@@ -27,6 +27,8 @@ int hasDec(double value) {
     return 0; 
 }
 
+
+
 char processLine(char *line) {
 
     // Stores previous word
@@ -118,8 +120,10 @@ char processLine(char *line) {
     strcat(compiledLine, "\n");
 }
 
+
+
 void processFile(FILE *file) {
-    
+
     char line[LINELENGTH];
 
     // Appends stock c code 
@@ -148,6 +152,8 @@ void processFile(FILE *file) {
 
 }
 
+
+
 // Processes a single function
 char processFunction(char *line) {
 
@@ -155,6 +161,8 @@ char processFunction(char *line) {
     char compiledFunc = "";
     processLine(*line);
 }
+
+
 
 int main(int argc, char *argv[]) {
     if (argc != 2) { 
