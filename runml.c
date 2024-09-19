@@ -24,9 +24,9 @@ bool inFunc = false;
 
 
 // Processes a single function definition line
-char FunctionHeader(char *line) {
+char* FunctionHeader(char *line) {
 
-    char funcDef[BUFSIZ];
+    static char funcDef[BUFSIZ];
 
     // Assumes that the first call occurs with the function definition line
     char *word = strtok(line, " ");
@@ -59,7 +59,7 @@ char FunctionHeader(char *line) {
 
 // processes a single line of ml
 char *processLine(char *line) {
-
+    printf("%s", line);
     // Stores previous word
     char prev[50];
 
@@ -70,7 +70,7 @@ char *processLine(char *line) {
     compiledLine[0] = '\0'; 
 
     // Tokenizes each line of code into individual words
-    char *word = strtok(line, " ");
+    char *word = strtok(line, " \t");
 
     // Loops through the line
     while (word != NULL) {
@@ -82,13 +82,13 @@ char *processLine(char *line) {
             strcat(compiledLine, "printf(\"%f\", ");
 
             // concatenates first variable
-            word = strtok(NULL, " ");
+            word = strtok(NULL, " \t");
             if (word != NULL) {
                 strcat(compiledLine, word);
             }
 
             // Ends print statement if it is a one variable/number print (e.g. print 3.5) 
-            word = strtok(NULL, " ");
+            word = strtok(NULL, " \t");
             if (word == NULL) {
                 strcat(compiledLine, ");\n");
                 break;
@@ -119,7 +119,7 @@ char *processLine(char *line) {
         // If the token isn't recognized it will simply generate the next word
         else {
             strncpy(prev, word, sizeof(prev) - 1);
-            word = strtok(NULL, " ");
+            word = strtok(NULL, " \t");
         }
     }
 
@@ -159,7 +159,7 @@ void processFile(FILE *file) {
             // reset flag and add closing chars if the end of the function has been reached
             else {
                 inFunc = false;
-                strcat(funcCode, "};\n");
+                strcat(funcCode, "return 0.0; }\n");
             }
         } 
         
