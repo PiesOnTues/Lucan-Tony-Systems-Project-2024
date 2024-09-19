@@ -59,7 +59,6 @@ char* FunctionHeader(char *line) {
 
 // processes a single line of ml
 char *processLine(char *line) {
-    printf("%s", line);
     // Stores previous word
     char prev[50];
 
@@ -142,8 +141,7 @@ void processFile(FILE *file) {
 
         // strips newline character from line
         line[strcspn(line, "\n")] = '\0';  
-        printf("%s\n", line);
-
+        
         // Skip comments
         if (strchr(line, '#') != NULL) {  
             continue;
@@ -159,7 +157,7 @@ void processFile(FILE *file) {
             // reset flag and add closing chars if the end of the function has been reached
             else {
                 inFunc = false;
-                strcat(funcCode, "return 0.0; }\n");
+                strcat(funcCode, "return 0; }\n");
             }
         } 
         
@@ -228,7 +226,7 @@ int main(int argc, char *argv[]) {
     char tempExec[] = "XXXXXX";
     char compCmd[LINELENGTH];
     mkstemp(tempExec);
-    snprintf(compCmd, LINELENGTH, "cc -std=c11 -Wall -Werror -o %s %s", tempExec, tempC);
+    snprintf(compCmd, LINELENGTH, "cc -std=c11 -o %s %s", tempExec, tempC);
     system(compCmd);
 
     // The resulting exec file that is created is then executed
@@ -240,6 +238,3 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
-
-
-

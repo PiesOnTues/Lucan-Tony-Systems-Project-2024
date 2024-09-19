@@ -1,6 +1,4 @@
 #include <stdio.h>
-double printsum(double a, double b) { 
-printf("%f", a+b);
-return 0.0; }
 int main() { 
+double x = 2.3;
 return 0; }
