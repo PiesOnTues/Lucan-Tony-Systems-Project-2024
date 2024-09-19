@@ -12,17 +12,12 @@
 
 #define LINELENGTH 256
 
-
-
 // Variable defined outside of main so it has global scope
 char compiledCode[BUFSIZ] = "";
-
 // mainCode stores all code within main function 
 char mainCode[BUFSIZ];
-
 // compiledFunc stores all code within functions 
 char compiledFunc[BUFSIZ];
-
 // Tells us if we are in a function or not
 bool inFunc = false;
 
