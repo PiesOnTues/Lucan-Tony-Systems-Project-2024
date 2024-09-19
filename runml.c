@@ -121,6 +121,7 @@ char processLine(char *line) {
 }
 
 void processFile(FILE *file) {
+    
     char line[LINELENGTH];
 
     // Appends stock c code 
