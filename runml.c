@@ -80,8 +80,6 @@ char processLine(char *line) {
             word = strtok(NULL, " ");
             strcat(compiledLine, word);
             strcat(compiledLine, ";");
-
-            // If the token isn't recognized it will simply generate the next word
         
         }
         
@@ -102,12 +100,12 @@ char processLine(char *line) {
                 strcat(compiledLine, " ");
             }
 
-            // adds closing characters
+            // Adds closing characters
             strcat(compiledLine, ");");
 
         }
 
-        // updates previous word and moves to next word
+        // If the token isn't recognized it will simply generate the next word
         else {
             strncpy(prev, word, sizeof(prev) - 1);
             word = strtok(NULL, " ");
