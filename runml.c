@@ -77,7 +77,6 @@ bool isFunc(const char *funcName) {
 
 // processes a single line of ml
 char *processLine(char *line) {
-    printf("%s\n", line);
     // Stores previous word
     char prev[50];
     char line1[50];
@@ -178,13 +177,14 @@ void processFile(FILE *file) {
         if (inFunc) {
             // Checks that we are still in a function (by checking if lines are indented)
             if (line[0] == ' ' || line[0] == '\t') {
+                strcat(funcCode, "\t");
                 strcat(funcCode, processLine(line));
             }
 
             // reset flag and add closing chars if the end of the function has been reached
             else {
                 inFunc = false;
-                strcat(funcCode, "return 0; }\n");
+                strcat(funcCode, "\treturn 0; }\n");
                 strcat(mainCode, processLine(line));
             }
         } 
@@ -216,7 +216,7 @@ void processFile(FILE *file) {
     strcat(compiledCode, mainCode);
 
     // sets main to return nothing
-    strcat(compiledCode, "return 0; }\n");
+    strcat(compiledCode, "return 0;\n }\n");
 }
 
 
