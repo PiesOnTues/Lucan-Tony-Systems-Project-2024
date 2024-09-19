@@ -64,6 +64,20 @@ char* FunctionHeader(char *line) {
 
 
 
+// function to check if a token exists as a predefined function
+bool isFunc(char funcName) {
+
+    // checks if item is in the list
+    for (int i = 0; i < funcIndex; i++) {
+        // Compare each item in the list with the inputted item
+        if (strcmp(funcArr[i], funcName) == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
 // processes a single line of ml
 char *processLine(char *line) {
 
