@@ -45,10 +45,11 @@ void processFunction(char *line) {
     word = strtok(NULL, " ");
     strcat(compiledFunc, "double ");
     strcat(compiledFunc, word);  // Function name
-    strcat(compiledFunc, "(double ");
+    strcat(compiledFunc, "(");
 
     // Process function parameters
     while ((word = strtok(NULL, " ")) != NULL) {
+        strcat(compiledFunc, "double ");
         strcat(compiledFunc, word); // perameter name
         strcat(compiledFunc, ", ");
     }
