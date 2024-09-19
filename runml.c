@@ -5,11 +5,20 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+
+
 #define LINELENGTH 256
+
+
 
 // Variable defined oustide of main so it has global scope
 char compiledCode[BUFSIZ] = ""; 
 
+// Tells us if we are in a function or not
+int inFunc = 0;
+
+
+// DELETEME
 int hasDec(double value) {
     // Convert the double to a string
     char buffer[50];
@@ -28,7 +37,7 @@ int hasDec(double value) {
 }
 
 
-
+// processes a single line of ml
 char processLine(char *line) {
 
     // Stores previous word
@@ -88,23 +97,14 @@ char processLine(char *line) {
         // Handles function definitions
         else if (strcmp(word, "function") == 0) {
 
-            // Contcatanates "double" + function name
-            strcat(compiledLine, "double ");
-            word = strtok(NULL, " ");
-            strcat(compiledLine, word);  
-            strcat(compiledLine, "(");
+            // Set inFunc flag to indicate we are in a function
+            inFunc = 1;  
 
-            // Concatenates the parameters of the function
-            while (strtok != NULL) {
-                word = strtok(NULL, " ");
-                strcat(compiledLine, "double ");
-                strcat(compiledLine, word); 
-                strcat(compiledLine, " ");
-            }
+            // send line to processFunction
+            processFunction(line);
 
-            // Adds closing characters
-            strcat(compiledLine, ");");
-
+            // return early when function is defined
+            return compiledLine;
         }
 
         // If the token isn't recognized it will simply generate the next word
@@ -121,7 +121,7 @@ char processLine(char *line) {
 }
 
 
-
+// joins multiple functions into one consolidated file
 void processFile(FILE *file) {
 
     char line[LINELENGTH];
@@ -155,11 +155,51 @@ void processFile(FILE *file) {
 
 
 // Processes a single function
-char processFunction(char *line) {
+void processFunction(char *line) {
 
-    // Define name and perameters
-    char compiledFunc = "";
-    processLine(*line);
+    // Stores the processed function body
+    char compiledFunc[200] = "";
+
+    // Assumes that the first call occurs with the function definition line
+    char *word = strtok(line, " ");
+    
+    // Skip "function" keyword
+    word = strtok(NULL, " ");
+    strcat(compiledFunc, "double ");
+    strcat(compiledFunc, word);  // Function name
+    strcat(compiledFunc, "(double ");
+
+    // Process function parameters
+    while ((word = strtok(NULL, " ")) != NULL) {
+        strcat(compiledFunc, word);
+        strcat(compiledFunc, ", ");
+    }
+
+    // Removes trailing comma
+    if (strlen(compiledFunc) > 2) {
+        compiledFunc[strlen(compiledFunc) - 2] = '\0';
+    }
+
+    // Adds closing characters
+    strcat(compiledFunc, ") {\n");
+
+    // Adds function definition to compiled code
+    strcat(compiledCode, compiledFunc);
+
+    // Process the function body line by line
+    while (fgets(line, LINELENGTH, stdin)) {
+        // Checks if line starts with tab character or indent (if we are still in the function scope)
+        if (line[0] != '\t' && line[0] != ' ') {
+            // reset inFunc flag when end of function is reached
+            inFunc = 0;
+            break;
+        }
+
+        // Process the line inside the function
+        processLine(line);
+
+    }
+
 }
 
 
