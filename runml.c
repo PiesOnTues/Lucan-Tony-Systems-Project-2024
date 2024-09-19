@@ -68,7 +68,8 @@ char* FunctionHeader(char *line) {
 bool isFunc(const char *funcName) {
     // checks if item is in the list
     for (int i = 0; i < funcIndex; i++) {
-        if (strstr(funcArr[i], funcName)) {
+        printf("%s\n", funcArr[i]);
+        if (strstr(funcName, funcArr[i])) {
             return true;
         }
     }
@@ -77,7 +78,7 @@ bool isFunc(const char *funcName) {
 
 // processes a single line of ml
 char *processLine(char *line) {
-    printf("%s", line);
+    printf("%s\n", line);
     // Stores previous word
     char prev[50];
 
@@ -92,6 +93,7 @@ char *processLine(char *line) {
 
     // Loops through the line
     while (word != NULL) {
+
         if (isFunc(word) == true) {
             strcat(compiledLine, line);
             strcat(compiledLine, "\n");
