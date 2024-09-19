@@ -65,12 +65,7 @@ char* FunctionHeader(char *line) {
 
 
 // function to check if a token exists as a predefined function
-<<<<<<< HEAD
-bool isFunc(char *funcName) {
-
-=======
 bool isFunc(const char *funcName) {
->>>>>>> 9c2cf8b47d99da6be9261455ac3d022c7cf44f9e
     // checks if item is in the list
     for (int i = 0; i < funcIndex; i++) {
         if (strstr(funcArr[i], funcName)) {
