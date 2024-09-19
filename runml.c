@@ -184,6 +184,7 @@ void processFile(FILE *file) {
             else {
                 inFunc = false;
                 strcat(funcCode, "return 0; }\n");
+                strcat(mainCode, processLine(line));
             }
         } 
         

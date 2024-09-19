@@ -1,5 +1,7 @@
 #include <stdio.h>
-double multiply(double a, double b) { 
+double printsum(double a, double b) { 
+printf("%f", a+b);
 return 0; }
 int main() { 
+printsum
 return 0; }
