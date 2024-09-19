@@ -65,22 +65,19 @@ char* FunctionHeader(char *line) {
 
 
 // function to check if a token exists as a predefined function
-bool isFunc(char funcName) {
-
+bool isFunc(const char *funcName) {
     // checks if item is in the list
     for (int i = 0; i < funcIndex; i++) {
-        // Compare each item in the list with the inputted item
-        if (strcmp(funcArr[i], funcName) == 0) {
+        if (strstr(funcArr[i], funcName)) {
             return true;
-        } else {
-            return false;
         }
     }
+    return false;
 }
 
 // processes a single line of ml
 char *processLine(char *line) {
-
+    printf("%s", line);
     // Stores previous word
     char prev[50];
 
@@ -95,6 +92,10 @@ char *processLine(char *line) {
 
     // Loops through the line
     while (word != NULL) {
+        if (isFunc(word) == true) {
+            strcat(compiledLine, line);
+            strcat(compiledLine, "\n");
+        }
 
         // Handles print statements
         if (strcmp(word, "print") == 0) {
