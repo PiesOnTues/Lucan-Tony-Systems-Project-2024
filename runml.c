@@ -24,7 +24,6 @@ char funcArr[50][100];
 int funcIndex = 0;
 // Tells us if we are in a function or not
 bool inFunc = false;
-
 // Processes a single function definition line
 char* FunctionHeader(char *line) {
     
