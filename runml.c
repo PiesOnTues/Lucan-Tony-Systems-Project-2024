@@ -32,26 +32,28 @@ int varIndex = 0;
 // Tells us if we are in a function or not
 bool inFunc = false;
 
+// invalidId stores a boolean value which indicates wether or not invalid identifiers are present within the program
+bool invalidId = false;
+
 // Counts number of identifiers 
 int identifierCount = 0;
 
 
 
-// Checks if the string passed in satisfies the condition for a valid ml identifier or not, and handles the error accordingly
+// Checks if the string passed in satisfies the condition for a valid ml identifier or not, and flags the error accordingly
 void validateIdentifier(char *id) {
 
     // Check if the function name is between 1-12 characters
     if (strlen(id) < 1 || strlen(id) > 12) {
         // flags error
-        fprintf(stderr, "invalid identifiers present, ensure all identifiers consist only of 1-12 alphabetical characters\n");
-        exit(EXIT_FAILURE);
+        invalidId = true;
+        
     } else {
         // check if its fully alphabetical or not
         for (int i = 0; i < strlen(id); i++) {
             if (!isalpha(id[i])) {
                 // flags error
-                fprintf(stderr, "invalid identifiers present, ensure all identifiers consist only of 1-12 alphabetical characters\n");
-                exit(EXIT_FAILURE);
+                invalidId = true;
             }
         }
     }
@@ -81,7 +83,6 @@ char* functionHeader(char *line) {
 
     // iterates the total identifer count
     identifierCount++;
-    printf("%d",identifierCount);
 
     // Process function parameters
     while ((word = strtok(NULL, " ")) != NULL) {
@@ -307,7 +308,6 @@ char *processLine(char *line) {
         }
     }
 
-    printf("%d\n",identifierCount);
     return compiledLine;
 
 }
@@ -394,18 +394,6 @@ int main(int argc, char *argv[]) {
     // sets correct file extension
     const char *extension = ".ml";
 
-    /*
-
-    Error Handling
-    
-    */ 
-    
-    // Checks if the identifier limit has been surpassed
-    if (identifierCount > 50) {
-        fprintf(stderr, "%d unique identifiers present, maximum of 50 allowed.\n", identifierCount);
-        exit(EXIT_FAILURE);
-    }
-
     // checks that number of args is correct
     if (argc != 2) {
         fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
@@ -427,6 +415,18 @@ int main(int argc, char *argv[]) {
 
     processFile(file_in);
     fclose(file_in);
+
+    // checks for invalid identifiers and handles the error in the case they do exist
+    if (invalidId) {
+        fprintf(stderr, "invalid identifiers present, ensure all identifiers consist only of 1-12 alphabetical characters\n");
+        exit(EXIT_FAILURE);
+    }
+        
+    // Checks if the identifier limit has been surpassed
+    if (identifierCount > 50) {
+        fprintf(stderr, "%d unique identifiers present, maximum of 50 allowed.\n", identifierCount);
+        exit(EXIT_FAILURE);
+    }
 
     // The compiled code is stored in a char which is then written to a new temporary C file
     char tempC[] = "temp.c";
