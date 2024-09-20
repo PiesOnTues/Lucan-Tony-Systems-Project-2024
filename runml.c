@@ -104,7 +104,7 @@ bool varExists(const char *varName) {
         if (varArr[i] == NULL) {
             break;
         }
-        if (strcmp(varName, varArr[i])) {
+        if (strstr(varName, varArr[i])) {
             return true;
         }
     }
