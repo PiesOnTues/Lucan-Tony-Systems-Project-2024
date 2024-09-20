@@ -1,2 +1,2 @@
 shmungus <- 4
-var <- shmungus
+var <- shmungus + 4

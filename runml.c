@@ -155,11 +155,33 @@ bool funcExists(const char *funcName) {
 
 
 
+// function to check if an input string is an operational symbol or not
+bool isOperator (char *val) {
+
+    // define operational symbols
+    char symbols[] = {'*', '+', '-', '/'};
+
+    int i = 0;
+
+    // Loop through the symbols array
+    for (i = 0; i < 4; i++) {
+        if (*val == symbols[i]) {
+            return true;
+            break;
+        }
+    }
+
+    return false;
+
+}
+
+
+
 // checks if the value of a variable is actually valid and handles such an error
 void validateValue(char *val) {
 
-    // checks if the value passed in is just some random string of non digitcharacters
-    if (!varExists(val) && !funcExists(val) && !isNum(val)) {
+    // checks if the value passed in is just some random string of non-digit characters
+    if (!varExists(val) && !funcExists(val) && !isNum(val) && !isOperator(val) && !NULL) {
         // if so an error is thrown
         fprintf(stderr, "Assigned value must be either a valid identifier or a numerical value\n");
         exit(EXIT_FAILURE);
@@ -284,10 +306,6 @@ char *processLine(char *line) {
                     varVal = true;
                 }
 
-
-                // check that the value assigned to the variable isnt some random string of characters
-                validateValue(word);
-
                 strcat(tempVarCode, word);
                 word = strtok(NULL, " ");
                 }
@@ -312,7 +330,7 @@ char *processLine(char *line) {
             }
         }
 
-        // If the token isn't recognized it will simply generate the next word
+        // If the token isn't recognized, check if it is meaningful or null
         else {
             strncpy(prev, word, sizeof(prev) - 1);
             word = strtok(NULL, " \t");
