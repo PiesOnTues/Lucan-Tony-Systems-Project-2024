@@ -264,6 +264,7 @@ char *processLine(char *line) {
         // Concatenates variable directly to compiledCode so variables global scope
         else if (strcmp(word, "<-") == 0) {
 
+            bool varVal = false;
             char tempVarCode[BUFSIZ] = "";
 
             // concatenates: "double" + variable name + "="
@@ -277,8 +278,15 @@ char *processLine(char *line) {
             // Generates and concatenates variable's assigned value
             word = strtok(NULL, " ");
             while (word != NULL) {
+                // Check if the assigned value is another variable and if so it must be printed in main
+                if (varExists(word)) {
+                    varVal = true;
+                }
+
+
                 // check that the value assigned to the variable isnt some random string of characters
                 validateValue(word);
+
                 strcat(tempVarCode, word);
                 word = strtok(NULL, " ");
                 }
@@ -293,8 +301,11 @@ char *processLine(char *line) {
             // line end characters
             strcat(tempVarCode, ";\n");
 
+            // Checks if the variable needs to be defined in a function, in main or globally
             if (inFunc) {
                 strcat(funcCode, tempVarCode);
+            } else if (varVal) {
+                strcat(mainCode, tempVarCode);
             } else {
                 strcat(compiledCode, tempVarCode);
             }
