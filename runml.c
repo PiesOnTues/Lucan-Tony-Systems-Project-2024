@@ -165,7 +165,7 @@ char *processLine(char *line) {
                     strcat(compiledLine, word);
                 }
             } else {
-                // if the variable hasn't been defined it simply defines the varaible with the value of 0 and prints 0
+                //  if the variable hasn't been defined it simply defines the varaible with the value of 0 and prints 0
                 strcat(compiledCode, "double ");
                 strcat(compiledCode, word);
                 strcat(compiledCode, " = 0;");
