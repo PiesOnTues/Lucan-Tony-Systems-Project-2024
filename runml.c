@@ -61,6 +61,16 @@ char* FunctionHeader(char *line) {
 
 
 
+int isDouble(const char *str) {
+    char *endptr;
+    // Use strtod to attempt conversion to double
+    double val = strtod(str, &endptr);
+    // Checks if string was succesfully converted 
+    return *endptr == '\0' && endptr != str;
+}
+
+
+
 // function to check if a token exists as a predefined function
 bool isFunc(const char *funcName) {
 
@@ -108,25 +118,43 @@ char *processLine(char *line) {
                     
             // concatenates printf function for float vals
             strcat(compiledLine, "printVal(");
-            
-            // concatenates first variable
+
+            // checks if first variable/float is a already defined variable or is a double
             word = strtok(NULL, " \t");
-            if (word != NULL) {
-                strcat(compiledLine, word);
+            if (isVar(word) || isDouble(word)) {
+                // concatenates first variable/float
+                if (word != NULL) {
+                    strcat(compiledLine, word);
+                }
+            } else {
+                // if the variable hasn't been defined it simply defines the varaible with the value of 0 and prints 0
+                strcat(compiledCode, "double");
+                strcat(compiledCode, word);
+                strcat(compiledCode, " = 0");
+                strcat(compiledLine, "0");
+
+
+
+                
             }
 
-            // Ends print statement if it is a one variable/number print (e.g. print 3.5) 
-            word = strtok(NULL, " \t");
-            if (word == NULL) {
+                // Ends print statement if it is a one variable/number print (e.g. print 3.5) 
+                word = strtok(NULL, " \t");
+                if (word == NULL) {
+                    strcat(compiledLine, ");\n");
+                    break;
+                }
+                    
+                // If it is a operation print it concatenates the operation symbol, concatenates second variable and then closes the print
+                strcat(compiledLine, word);
+                word = strtok(NULL, " ");
+                strcat(compiledLine, word);
                 strcat(compiledLine, ");\n");
-                break;
-            }
+            
                 
-            // If it is a operation print it concatenates the operation symbol, concatenates second variable and then closes the print
-            strcat(compiledLine, word);
-            word = strtok(NULL, " ");
-            strcat(compiledLine, word);
-            strcat(compiledLine, ");\n");
+            
+
+            
 
         }
 
@@ -161,6 +189,8 @@ char *processLine(char *line) {
 
             // Generates and concatenates variable's assigned value
             word = strtok(NULL, " ");
+            // stores var name in varArr and iterates the indexer
+            strcpy(varArr[varIndex++], word);
             strcat(compiledCode, word);
             strcat(compiledCode, ";\n");
         }
