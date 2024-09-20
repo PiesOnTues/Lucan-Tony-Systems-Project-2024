@@ -1,0 +1,12 @@
+1.  we assume that all mathematical operators ("*", "+", "-", "/") and assignment characters ("<-") 
+    in ml are "spaced out" between the values upon which they operate.
+    for example, in correct ml, printing the product of two variables ("a" and "b")
+    should be expressed as:
+
+        print a * b
+    
+    where;
+
+        print a*b
+
+    is incorrect
