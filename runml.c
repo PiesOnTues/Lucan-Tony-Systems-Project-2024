@@ -155,7 +155,7 @@ bool funcExists(const char *funcName) {
 
 
 // checks if the value of a variable is actually valid and handles such an error
-validateValue(char *val) {
+void validateValue(char *val) {
 
     // checks if the value passed in is just some random string of non digitcharacters
     if (!varExists(val) && !funcExists(val) && !isNum(val)) {
@@ -164,6 +164,8 @@ validateValue(char *val) {
         exit(EXIT_FAILURE);
     }
 }
+
+
 
 // processes a single line of ml
 char *processLine(char *line) {
