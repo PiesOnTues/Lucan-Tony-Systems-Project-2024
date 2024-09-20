@@ -126,11 +126,7 @@ char *processLine(char *line) {
     // Stores previous word
     char prev[50] = {0};
 
-    // Copies line for later use
-    char line1[LINELENGTH];
-    if (line != NULL) {
-        strcpy(line1, line);
-    }
+
     // Stores the processed line as a whole
     static char compiledLine[LINELENGTH];
 
@@ -142,13 +138,20 @@ char *processLine(char *line) {
 
     // Loops through the line
     while (word != NULL) {
-    
+        
         if (isFunc(word) == true) {
-            strcat(compiledLine, line1);
+            // Once a function name is found a the rest of the line is printed
+            strcat(compiledLine, word);
+            while ((word = strtok(NULL, " ")) != NULL) {
+                strcat(compiledLine, word);
+            }
             strcat(compiledLine, ";\n");
         }
 
         // Handles print statements
+        if (word == NULL) {
+            break;
+        }
         if (strcmp(word, "print") == 0) {
                     
             // concatenates printf function for float vals
@@ -167,10 +170,6 @@ char *processLine(char *line) {
                 strcat(compiledCode, word);
                 strcat(compiledCode, " = 0;");
                 strcat(compiledLine, "0");
-
-
-
-                
             }
 
             // Ends print statement if it is a one variable/number print (e.g. print 3.5) 
@@ -185,12 +184,6 @@ char *processLine(char *line) {
             word = strtok(NULL, " ");
             strcat(compiledLine, word);
             strcat(compiledLine, ");\n");
-            
-                
-            
-
-            
-
         }
 
         // Handle return statement
