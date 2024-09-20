@@ -1,15 +1,14 @@
 #include <stdio.h>
 #include <math.h> 
-double one = 1;
+double x = a;
 
 void printVal(double value) { if (value == (int)value) { printf("%d\n", (int)value); } else { printf("%f\n", value); } }
  
-double increment(double value) { 
-	return value + one;
+double multiply(double a, double b) { 
+		return x;
 	return 0;
  }
 int main() { 
-printVal(increment(3)+increment(4));
-increment(4);
+printVal(multiply(10,5));
 return 0;
  }
