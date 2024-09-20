@@ -16,7 +16,7 @@
 char compiledCode[10000] = "";
 // mainCode stores code of the main function
 char mainCode[BUFSIZ];
-// compiledFunc stores all code under non-main functions
+// funcCode stores all code under non-main functions
 char funcCode[BUFSIZ];
 
 // funcArr stores the name of each new function when it is compiled
@@ -29,7 +29,7 @@ char varArr[BUFSIZ][100];
 // varIndex stores the current index for referencing the varArr
 int varIndex = 0;
 
-// Tells us if we are in a function or not
+// inFunc Tells us if we are in a function or not
 bool inFunc = false;
 
 // invalidId stores a boolean value which indicates wether or not invalid identifiers are present within the program
@@ -64,6 +64,7 @@ void validateIdentifier(char *id) {
 // Processes a single function definition line
 char* functionHeader(char *line) {
     
+    // designates a place to store the header line as it is compiled
     static char funcDef[BUFSIZ] = "";
 
     // Assumes that the first call occurs with the function definition line
@@ -89,6 +90,7 @@ char* functionHeader(char *line) {
         strcat(funcDef, "double ");
         strcat(funcDef, word); // perameter name
         strcat(funcDef, ", ");
+
         // Adds parameters to list of variables
         strcpy(varArr[varIndex++], word);
     }
@@ -219,11 +221,12 @@ char *processLine(char *line) {
                 break;
             }
                     
-            // If it is a operation print it concatenates the operation symbol, concatenates second variable and then closes the print
+            // If it is a operation print it concatenates the operation symbol and var/number and the continues this till line end
             strcat(compiledLine, word);
             word = strtok(NULL, " ");
-            if (word != NULL) {
+            while (word != NULL) {
                 strcat(compiledLine, word);
+                word = strtok(NULL, " ");
             }
             strcat(compiledLine, ");\n");
         }

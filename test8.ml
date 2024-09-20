@@ -1,3 +1,3 @@
-# Should throw an error
-a1 <- 3
-print a1
+a <- 2
+
+print a * a + a
