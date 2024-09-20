@@ -242,13 +242,20 @@ char *processLine(char *line) {
         // Concatenates variable directly to compiledCode so variables global scope
         else if (strcmp(word, "<-") == 0) {
 
+            char tempVarCode[BUFSIZ];
+
             // concatenates: "double" + variable name + "="
-            strcat(compiledCode, "double ");
-            strcat(compiledCode, prev);  // varname
-            strcat(compiledCode, " = ");
+            strcat(tempVarCode, "double ");
+            strcat(tempVarCode, prev);  // varname
+            strcat(tempVarCode, " = ");
 
             // Generates and concatenates variable's assigned value
             word = strtok(NULL, " ");
+            while (word != NULL) {
+                strcat(tempVarCode, word);
+                word = strtok(NULL, " ");
+                }
+            
 
             // make sure variable doesnt already exist
             if (!varExists(prev)) {
@@ -256,10 +263,14 @@ char *processLine(char *line) {
                 strcpy(varArr[varIndex++], prev);
                 identifierCount++;
             }
-
             // line end characters
-            strcat(compiledCode, word);
-            strcat(compiledCode, ";\n");
+            strcat(tempVarCode, ";\n");
+
+            if (inFunc) {
+                strcat(funcCode, tempVarCode);
+            } else {
+                strcat(compiledCode, tempVarCode);
+            }
         }
 
         // If the token isn't recognized it will simply generate the next word
