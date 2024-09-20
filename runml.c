@@ -334,24 +334,38 @@ void processFile(FILE *file) {
 // Main
 int main(int argc, char *argv[]) {
 
-    // error checking
+    // gets filename from command line input
+    const char *filename = argv[1];
 
-    // checks identifier limit has not been surpassed
+    // sets correct file extension
+    const char *extension = ".ml";
+
+    /*
+
+    Error Handling
+    
+    */ 
+
+    // Checks if the identifier limit has been surpassed
     if (identifierCount > 50) {
-        fprintf(stderr, "%d unique identifiers present, maximum of 50 required\n", identifierCount);
-        return 1;
-    }
-    // tony put a comment here
-    if (argc != 2) { 
-        fprintf(stderr, "usage: %s <input file>\n", argv[0]);
-        return 1;
+        fprintf(stderr, "%d unique identifiers present, maximum of 50 allowed.\n", identifierCount);
+        exit(EXIT_FAILURE);
     }
 
-    // gets file name from command line input
-    const char *file_in_path = argv[1];
+    // checks that number of args is correct
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    // Check if the filename ends with the required ".ml" extension
+    if (strlen(filename) < strlen(extension) || strcmp(filename + strlen(filename) - strlen(extension), extension) != 0) {
+        fprintf(stderr, "Error: Input file must have the '.ml' extension.\n");
+        exit(EXIT_FAILURE);
+    }
 
     // Opens .ml file and then compiles it in processFile function 
-    FILE *file_in = fopen(file_in_path, "r");
+    FILE *file_in = fopen(filename, "r");
     if (file_in == NULL) {
         perror("error opening input file");
         return 1;
