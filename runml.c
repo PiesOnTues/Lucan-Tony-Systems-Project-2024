@@ -85,12 +85,13 @@ bool isVar(const char *varName) {
 
 }
 
-int isDouble(const char *str) {
+int isNum(const char *str) {
     char *endptr;
     // Use strtod to attempt conversion to double
     double val = strtod(str, &endptr);
     // Checks if string was succesfully converted 
-    return *endptr == '\0' && endptr != str;
+    return endptr != str;
+    return val;
 }
 
 
@@ -146,16 +147,16 @@ char *processLine(char *line) {
 
             // checks if first variable/float is a already defined variable or is a double
             word = strtok(NULL, " \t");
-            if (isVar(word) || isDouble(word)) {
+            if (isVar(word) || isNum(word)) {
                 // concatenates first variable/float
                 if (word != NULL) {
                     strcat(compiledLine, word);
                 }
             } else {
                 // if the variable hasn't been defined it simply defines the varaible with the value of 0 and prints 0
-                strcat(compiledCode, "double");
+                strcat(compiledCode, "double ");
                 strcat(compiledCode, word);
-                strcat(compiledCode, " = 0");
+                strcat(compiledCode, " = 0;");
                 strcat(compiledLine, "0");
 
 
@@ -163,18 +164,18 @@ char *processLine(char *line) {
                 
             }
 
-                // Ends print statement if it is a one variable/number print (e.g. print 3.5) 
-                word = strtok(NULL, " \t");
-                if (word == NULL) {
-                    strcat(compiledLine, ");\n");
-                    break;
-                }
-                    
-                // If it is a operation print it concatenates the operation symbol, concatenates second variable and then closes the print
-                strcat(compiledLine, word);
-                word = strtok(NULL, " ");
-                strcat(compiledLine, word);
+            // Ends print statement if it is a one variable/number print (e.g. print 3.5) 
+            word = strtok(NULL, " \t");
+            if (word == NULL) {
                 strcat(compiledLine, ");\n");
+                break;
+            }
+                    
+            // If it is a operation print it concatenates the operation symbol, concatenates second variable and then closes the print
+            strcat(compiledLine, word);
+            word = strtok(NULL, " ");
+            strcat(compiledLine, word);
+            strcat(compiledLine, ");\n");
             
                 
             
