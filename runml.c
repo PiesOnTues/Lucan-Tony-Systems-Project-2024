@@ -145,8 +145,9 @@ char *processLine(char *line) {
                 }
             }
 
+            // end line correctly
             strcat(compiledLine, ";\n");
-            break;  // Since return ends the line
+            break;
         }
 
         // Handle variable assignment
