@@ -1,7 +1,7 @@
 # Prints 3, 6, 12, 12, 6, 0, 20
 var <- 3
 vartwo <- var
-vartwo <- vartwo*2
+vartwo <- vartwo *2 
 varthree <- vartwo*2
 print var
 print  vartwo
