@@ -442,6 +442,7 @@ int main(int argc, char *argv[]) {
     system(execCmd);
 
     remove(tempExec);
+    remove(tempC);
 
     return 0;
 }
