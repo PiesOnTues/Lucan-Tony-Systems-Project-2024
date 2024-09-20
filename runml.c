@@ -166,11 +166,17 @@ char *processLine(char *line) {
             // concatenates printf function for float vals
             strcat(compiledLine, "printVal(");
 
-            // checks if first variable/float is a already defined variable or is a double
+            // checks if the next word is an already defined variable or a double
             word = strtok(NULL, " \t");
             if (varExists(word) || isNum(word)) {
                 // concatenates first variable/float
                 if (word != NULL) {
+                    strcat(compiledLine, word);
+                }
+            // Checks if next word is a function name
+            } else if (funcExists(word)) {
+                strcat(compiledLine, word);
+                while ((word = strtok(NULL, " ")) != NULL) {
                     strcat(compiledLine, word);
                 }
             } else {
@@ -191,7 +197,9 @@ char *processLine(char *line) {
             // If it is a operation print it concatenates the operation symbol, concatenates second variable and then closes the print
             strcat(compiledLine, word);
             word = strtok(NULL, " ");
-            strcat(compiledLine, word);
+            if (word != NULL) {
+                strcat(compiledLine, word);
+            }
             strcat(compiledLine, ");\n");
         }
 
