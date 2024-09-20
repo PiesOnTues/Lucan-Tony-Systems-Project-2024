@@ -361,6 +361,11 @@ int main(int argc, char *argv[]) {
     
     */ 
 
+    // Checks for invalid identifiers
+    if (invalidIds != 0) {
+        fprintf(stderr, "%d invalid identifiers present, ensure all identifiers consist only of 1-12 alphabetical characters\n", identifierCount);
+    }
+
     // Checks if the identifier limit has been surpassed
     if (identifierCount > 50) {
         fprintf(stderr, "%d unique identifiers present, maximum of 50 allowed.\n", identifierCount);
