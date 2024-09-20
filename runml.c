@@ -36,7 +36,7 @@ bool inFunc = false;
 int identifierCount = 0;
 
 // Processes a single function definition line
-char* FunctionHeader(char *line) {
+char* functionHeader(char *line) {
     
     static char funcDef[BUFSIZ];
 
@@ -148,7 +148,7 @@ char *processLine(char *line) {
     // Loops through the line
     while (word != NULL) {
         
-        if (isFunc(word) == true) {
+        if (funcExists(word) == true) {
             // Once a function name is found a the rest of the line is printed
             strcat(compiledLine, word);
             while ((word = strtok(NULL, " ")) != NULL) {
@@ -295,7 +295,7 @@ void processFile(FILE *file) {
             if (strstr(line, "function") != NULL) {
                 // sets inFunc flag to true to indicate that we should compile code to the funcCode variable
                 inFunc = true;
-                strcat(funcCode, FunctionHeader(line));
+                strcat(funcCode, functionHeader(line));
             } 
             
             // if we are not in a function code gets compiled to mainCode
