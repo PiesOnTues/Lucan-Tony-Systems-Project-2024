@@ -18,12 +18,22 @@ char compiledCode[BUFSIZ] = "";
 char mainCode[BUFSIZ];
 // compiledFunc stores all code under non-main functions
 char funcCode[BUFSIZ];
-// funcList stores the name of each new function when it is compiled
+
+// funcArr stores the name of each new function when it is compiled
 char funcArr[50][100];
 // funcIndex stores the current index for referencing the funcList array
 int funcIndex = 0;
+
+// varArr stores the name of each new variable when it is compiled
+char varArr[50][100];
+// varIndex stores the current index for referencing the varArr
+int varIndex = 0;
+
 // Tells us if we are in a function or not
 bool inFunc = false;
+
+
+
 // Processes a single function definition line
 char* FunctionHeader(char *line) {
     
@@ -59,7 +69,21 @@ char* FunctionHeader(char *line) {
     return funcDef;
 }
 
+bool isVar(const char *varName) {
 
+    // checks if item is in the list
+    for (int i = 0; i < varIndex; i++) {
+        if (varArr[i] == NULL) {
+            break;
+        }
+        if (strstr(varName, varArr[i])) {
+            return true;
+        }
+    }
+
+    return false;
+
+}
 
 int isDouble(const char *str) {
     char *endptr;
@@ -83,6 +107,7 @@ bool isFunc(const char *funcName) {
             return true;
         }
     }
+    
     return false;
 }
 
