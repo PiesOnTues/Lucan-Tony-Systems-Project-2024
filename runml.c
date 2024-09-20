@@ -323,7 +323,7 @@ void processFile(FILE *file) {
 
 
 
-//main
+// Main
 int main(int argc, char *argv[]) {
 
     // error checking
