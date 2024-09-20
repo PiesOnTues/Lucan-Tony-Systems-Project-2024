@@ -128,6 +128,8 @@ bool funcExists(const char *funcName) {
     return false;
 }
 
+
+
 // processes a single line of ml
 char *processLine(char *line) {
     // Stores previous word
@@ -329,7 +331,6 @@ int main(int argc, char *argv[]) {
     // error checking
 
     // checks identifier limit has not been surpassed
-
     if (identifierCount > 50) {
         fprintf(stderr, "%d unique identifiers present, maximum of 50 required\n", identifierCount);
         return 1;
