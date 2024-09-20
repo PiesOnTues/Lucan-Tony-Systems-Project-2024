@@ -32,6 +32,9 @@ int varIndex = 0;
 // Tells us if we are in a function or not
 bool inFunc = false;
 
+// counts number of identifiers 
+int identifierCount = 0;
+
 
 
 // Processes a single function definition line
@@ -48,14 +51,21 @@ char* FunctionHeader(char *line) {
     strcat(funcDef, word);  // Function name
     strcat(funcDef, "(");
 
-    // stores function name in funcName array, and iterates the indexer
-    strcpy(funcArr[funcIndex++], word);
+    if (identifierCount > 50) {
+        printf("Identifier limit of 50 exceeded");
+    } else {
+        // stores function name in funcName array, and iterates the indexer
+        strcpy(funcArr[funcIndex++], word);
+        identifierCount++;
+    }
 
     // Process function parameters
     while ((word = strtok(NULL, " ")) != NULL) {
         strcat(funcDef, "double ");
         strcat(funcDef, word); // perameter name
         strcat(funcDef, ", ");
+        // Adds parameters to list of variables
+        strcpy(varArr[varIndex++], word);
     }
 
     // Removes trailing comma
@@ -70,13 +80,12 @@ char* FunctionHeader(char *line) {
 }
 
 bool isVar(const char *varName) {
-
     // checks if item is in the list
     for (int i = 0; i < varIndex; i++) {
         if (varArr[i] == NULL) {
             break;
         }
-        if (strstr(varName, varArr[i])) {
+        if (strcmp(varName, varArr[i])) {
             return true;
         }
     }
@@ -215,8 +224,14 @@ char *processLine(char *line) {
 
             // Generates and concatenates variable's assigned value
             word = strtok(NULL, " ");
-            // stores var name in varArr and iterates the indexer
-            strcpy(varArr[varIndex++], word);
+            // Checks if identifier count has been exceeded
+            if (identifierCount > 50) {
+                printf("Identifier limit of 50 exceeded");
+            } else {
+                // stores var name in varArr and iterates the indexer
+                strcpy(varArr[varIndex++], word);
+                identifierCount++;
+            }
             strcat(compiledCode, word);
             strcat(compiledCode, ";\n");
         }
