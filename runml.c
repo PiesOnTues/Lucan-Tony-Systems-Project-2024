@@ -20,12 +20,12 @@ char mainCode[BUFSIZ];
 char funcCode[BUFSIZ];
 
 // funcArr stores the name of each new function when it is compiled
-char funcArr[50][100];
+char funcArr[BUFSIZ][100];
 // funcIndex stores the current index for referencing the funcList array
 int funcIndex = 0;
 
 // varArr stores the name of each new variable when it is compiled
-char varArr[50][100];
+char varArr[BUFSIZ][100];
 // varIndex stores the current index for referencing the varArr
 int varIndex = 0;
 
