@@ -35,24 +35,23 @@ bool inFunc = false;
 // Counts number of identifiers 
 int identifierCount = 0;
 
-// set to true if any invalid -- not alphabetical, and not between 1 - 12 chars in length -- identifiers are present
-bool invalidId = false;
-
 
 
 // Checks if the string passed in satisfies the condition for a valid ml identifier or not
 void validateIdentifier(char *id) {
 
-    // Check if the function name is valid (is alphabetical and 1-12 characters)
+    // Check if the function name is between 1-12 characters
     if (strlen(id) < 1 || strlen(id) > 12) {
-        // flag invalid identifier
-        invalidId = true;
+        // flags error
+        fprintf(stderr, "invalid identifiers present, ensure all identifiers consist only of 1-12 alphabetical characters\n");
+        exit(EXIT_FAILURE);
     } else {
+        // check if its fully alphabetical or not
         for (int i = 0; i < strlen(id); i++) {
             if (!isalpha(id[i])) {
-                // flag invalid identifier
-                invalidId = true;
-                break; // Exit the loop if an invalid character is found
+                // flags error
+                fprintf(stderr, "invalid identifiers present, ensure all identifiers consist only of 1-12 alphabetical characters\n");
+                exit(EXIT_FAILURE);
             }
         }
     }
@@ -259,7 +258,7 @@ char *processLine(char *line) {
             strcat(tempVarCode, " = ");
 
             // validates variable name
-            validateIdentifier(word);
+            validateIdentifier(prev);
 
             // Generates and concatenates variable's assigned value
             word = strtok(NULL, " ");
@@ -383,12 +382,7 @@ int main(int argc, char *argv[]) {
     Error Handling
     
     */ 
-
-    // Checks for invalid identifiers
-    if (invalidId) {
-        fprintf(stderr, "invalid identifiers present, ensure all identifiers consist only of 1-12 alphabetical characters\n");
-    }
-
+    
     // Checks if the identifier limit has been surpassed
     if (identifierCount > 50) {
         fprintf(stderr, "%d unique identifiers present, maximum of 50 allowed.\n", identifierCount);

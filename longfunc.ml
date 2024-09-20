@@ -1,5 +1,5 @@
 # a looooong function
-function qqqqqqqqqqqqz param
-    print param
+function qqqqqqqqqqqqzssasdasdsad4123 param
+    print param * 2
 
-qqqqqqqqqqqqz (300)
+qqqqqqqqqqqqzssasdasdsad4123 (300)
