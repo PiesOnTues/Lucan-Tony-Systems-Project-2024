@@ -13,7 +13,7 @@
 #define LINELENGTH 256
 
 // compiledCode globally stores the summation of all function code and maincode
-char compiledCode[BUFSIZ] = "";
+char compiledCode[10000] = "";
 // mainCode stores code of the main function
 char mainCode[BUFSIZ];
 // compiledFunc stores all code under non-main functions
