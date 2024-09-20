@@ -184,7 +184,7 @@ void processFile(FILE *file) {
     char line[LINELENGTH];
 
     // Adds lines to import C11 standard libraries
-    strcat(compiledCode, "#include <stdio.h>\n #include <math.h> \n");
+    strcat(compiledCode, "#include <stdio.h>\n#include <math.h> \n");
 
     // Reads file line by line
     while (fgets(line, sizeof(line), file)) {
@@ -231,7 +231,7 @@ void processFile(FILE *file) {
     // the next few lines set up the structure of the fully compiled output file
 
     // adds function that accounts for integer printing
-    strcat(compiledCode, "void printVal(double value) { if (value == (int)value) { printf(\"%d\\n\", (int)value); } else { printf(\"%f\\n\", value); } }"); 
+    strcat(compiledCode, "\nvoid printVal(double value) { if (value == (int)value) { printf(\"%d\\n\", (int)value); } else { printf(\"%f\\n\", value); } }\n \n"); 
 
     // adds code of non-main functions
     strcat(compiledCode, funcCode);
