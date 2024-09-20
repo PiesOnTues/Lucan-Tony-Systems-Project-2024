@@ -151,17 +151,18 @@ char *processLine(char *line) {
         }
 
         // Handle variable assignment
+        // Concatenates variable directly to compiledCode so variables global scope
         else if (strcmp(word, "<-") == 0) {
 
             // concatenates: "double" + variable name + "="
-            strcat(compiledLine, "double ");
-            strcat(compiledLine, prev);  
-            strcat(compiledLine, " = ");
+            strcat(compiledCode, "double ");
+            strcat(compiledCode, prev);  
+            strcat(compiledCode, " = ");
 
             // Generates and concatenates variable's assigned value
             word = strtok(NULL, " ");
-            strcat(compiledLine, word);
-            strcat(compiledLine, ";\n");
+            strcat(compiledCode, word);
+            strcat(compiledCode, ";\n");
         }
 
         // If the token isn't recognized it will simply generate the next word
