@@ -26,7 +26,6 @@ int funcIndex = 0;
 bool inFunc = false;
 
 
-
 // Processes a single function definition line
 char* FunctionHeader(char *line) {
     
@@ -66,8 +65,12 @@ char* FunctionHeader(char *line) {
 
 // function to check if a token exists as a predefined function
 bool isFunc(const char *funcName) {
+
     // checks if item is in the list
     for (int i = 0; i < funcIndex; i++) {
+        if (funcArr[i] == NULL) {
+            break;
+        }
         if (strstr(funcName, funcArr[i])) {
             return true;
         }
@@ -78,12 +81,13 @@ bool isFunc(const char *funcName) {
 // processes a single line of ml
 char *processLine(char *line) {
     // Stores previous word
-    char prev[50];
-    
-    // Copies line for later use
-    char line1[50];
-    strcpy(line1, line);
+    char prev[50] = {0};
 
+    // Copies line for later use
+    char line1[LINELENGTH];
+    if (line != NULL) {
+        strcpy(line1, line);
+    }
     // Stores the processed line as a whole
     static char compiledLine[LINELENGTH];
 
@@ -95,7 +99,7 @@ char *processLine(char *line) {
 
     // Loops through the line
     while (word != NULL) {
-
+    
         if (isFunc(word) == true) {
             strcat(compiledLine, line1);
             strcat(compiledLine, ";\n");
@@ -106,7 +110,7 @@ char *processLine(char *line) {
                     
             // concatenates printf function for float vals
             strcat(compiledLine, "printf(\"%f\\n\", ");
-
+            
             // concatenates first variable
             word = strtok(NULL, " \t");
             if (word != NULL) {
