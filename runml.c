@@ -35,15 +35,35 @@ bool inFunc = false;
 // Counts number of identifiers 
 int identifierCount = 0;
 
-// invalidIds counts the number of invalid identifiers present in the inputted ml file (if any)
-int invalidIds = 0;
+// set to true if any invalid -- not alphabetical, and not between 1 - 12 chars in length -- identifiers are present
+bool invalidId = false;
+
+
+
+// Checks if the string passed in satisfies the condition for a valid ml identifier or not
+void validateIdentifier(char *id) {
+
+    // Check if the function name is valid (is alphabetical and 1-12 characters)
+    if (strlen(id) < 1 || strlen(id) > 12) {
+        // flag invalid identifier
+        invalidId = true;
+    } else {
+        for (int i = 0; i < strlen(id); i++) {
+            if (!isalpha(id[i])) {
+                // flag invalid identifier
+                invalidId = true;
+                break; // Exit the loop if an invalid character is found
+            }
+        }
+    }
+}
 
 
 
 // Processes a single function definition line
 char* functionHeader(char *line) {
     
-    static char funcDef[BUFSIZ];
+    static char funcDef[BUFSIZ] = "";
 
     // Assumes that the first call occurs with the function definition line
     char *word = strtok(line, " ");
@@ -54,19 +74,8 @@ char* functionHeader(char *line) {
     strcat(funcDef, word);  // Function name
     strcat(funcDef, "(");
 
-    // Check if the function name is valid (is alphabetical and 1-12 characters)
-    if (strlen(word) < 1 || strlen(word) > 12) {
-        // Increment the invalid identifier counter
-        invalidIds++;
-    } else {
-        for (int i = 0; i < strlen(word); i++) {
-            if (!isalpha(word[i])) {
-                // Increment the invalid identifier counter
-                invalidIds++;
-                break; // Exit the loop if an invalid character is found
-            }
-        }
-    }
+    // check function name identifier validity
+    validateIdentifier(word);
 
     // stores function name in funcName array, and iterates the indexer
     strcpy(funcArr[funcIndex++], word);
@@ -249,6 +258,9 @@ char *processLine(char *line) {
             strcat(tempVarCode, prev);  // varname
             strcat(tempVarCode, " = ");
 
+            // validates variable name
+            validateIdentifier(word);
+
             // Generates and concatenates variable's assigned value
             word = strtok(NULL, " ");
             while (word != NULL) {
@@ -256,7 +268,6 @@ char *processLine(char *line) {
                 word = strtok(NULL, " ");
                 }
             
-
             // make sure variable doesnt already exist
             if (!varExists(prev)) {
                 // stores var name in varArr and iterates the indexer
@@ -374,8 +385,8 @@ int main(int argc, char *argv[]) {
     */ 
 
     // Checks for invalid identifiers
-    if (invalidIds != 0) {
-        fprintf(stderr, "%d invalid identifiers present, ensure all identifiers consist only of 1-12 alphabetical characters\n", identifierCount);
+    if (invalidId) {
+        fprintf(stderr, "invalid identifiers present, ensure all identifiers consist only of 1-12 alphabetical characters\n");
     }
 
     // Checks if the identifier limit has been surpassed
