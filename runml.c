@@ -155,41 +155,6 @@ bool funcExists(const char *funcName) {
 
 
 
-// function to check if an input string is an operational symbol or not
-bool isOperator (char *val) {
-
-    // define operational symbols
-    char symbols[] = {'*', '+', '-', '/'};
-
-    int i = 0;
-
-    // Loop through the symbols array
-    for (i = 0; i < 4; i++) {
-        if (*val == symbols[i]) {
-            return true;
-            break;
-        }
-    }
-
-    return false;
-
-}
-
-
-
-// checks if the value of a variable is actually valid and handles such an error
-void validateValue(char *val) {
-
-    // checks if the value passed in is just some random string of non-digit characters
-    if (!varExists(val) && !funcExists(val) && !isNum(val) && !isOperator(val) && !NULL) {
-        // if so an error is thrown
-        fprintf(stderr, "Assigned value must be either a valid identifier or a numerical value\n");
-        exit(EXIT_FAILURE);
-    }
-}
-
-
-
 // processes a single line of ml
 char *processLine(char *line) {
 
