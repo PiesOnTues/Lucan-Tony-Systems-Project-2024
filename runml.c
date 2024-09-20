@@ -35,8 +35,6 @@ bool inFunc = false;
 // counts number of identifiers 
 int identifierCount = 0;
 
-
-
 // Processes a single function definition line
 char* FunctionHeader(char *line) {
     
@@ -81,6 +79,9 @@ char* FunctionHeader(char *line) {
     return funcDef;
 }
 
+
+
+// checks if variable already exists or not
 bool varExists(const char *varName) {
 
     // checks if item is in the list
@@ -97,6 +98,9 @@ bool varExists(const char *varName) {
 
 }
 
+
+
+// checks if inputted string is a number
 int isNum(const char *str) {
     char *endptr;
     // Use strtod to attempt conversion to double
@@ -228,6 +232,8 @@ char *processLine(char *line) {
                 identifierCount++;
             }
 
+            identifierHandler();
+
             // line end characters
             strcat(compiledCode, word);
             strcat(compiledCode, ";\n");
@@ -320,6 +326,14 @@ void processFile(FILE *file) {
 //main
 int main(int argc, char *argv[]) {
 
+    // error checking
+
+    // checks identifier limit has not been surpassed
+
+    if (identifierCount > 50) {
+        fprintf(stderr, "%d unique identifiers present, maximum of 50 required\n", identifierCount);
+        return 1;
+    }
     // tony put a comment here
     if (argc != 2) { 
         fprintf(stderr, "usage: %s <input file>\n", argv[0]);
