@@ -32,8 +32,13 @@ int varIndex = 0;
 // Tells us if we are in a function or not
 bool inFunc = false;
 
-// counts number of identifiers 
+// Counts number of identifiers 
 int identifierCount = 0;
+
+// invalidIds counts the number of invalid identifiers present in the inputted ml file (if any)
+int invalidIds = 0;
+
+
 
 // Processes a single function definition line
 char* functionHeader(char *line) {
@@ -49,15 +54,25 @@ char* functionHeader(char *line) {
     strcat(funcDef, word);  // Function name
     strcat(funcDef, "(");
 
-    if (identifierCount > 50) {
-        printf("Identifier limit of 50 exceeded");
+    // Check if the function name is valid (is alphabetical and 1-12 characters)
+    if (strlen(word) < 1 || strlen(word) > 12) {
+        // Increment the invalid identifier counter
+        invalidIds++;
     } else {
-        // stores function name in funcName array, and iterates the indexer
-        strcpy(funcArr[funcIndex++], word);
-
-        // iterates the total identifer count
-        identifierCount++;
+        for (int i = 0; i < strlen(word); i++) {
+            if (!isalpha(word[i])) {
+                // Increment the invalid identifier counter
+                invalidIds++;
+                break; // Exit the loop if an invalid character is found
+            }
+        }
     }
+
+    // stores function name in funcName array, and iterates the indexer
+    strcpy(funcArr[funcIndex++], word);
+
+    // iterates the total identifer count
+    identifierCount++;
 
     // Process function parameters
     while ((word = strtok(NULL, " ")) != NULL) {
@@ -180,7 +195,7 @@ char *processLine(char *line) {
                     strcat(compiledLine, word);
                 }
             } else {
-                //  if the variable hasn't been defined it simply defines the varaible with the value of 0 and prints 0
+                // If the variable hasn't been defined it simply defines the varaible with the value of 0 and prints 0
                 strcat(compiledCode, "double ");
                 strcat(compiledCode, word);
                 strcat(compiledCode, " = 0;");
