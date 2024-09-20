@@ -234,8 +234,6 @@ char *processLine(char *line) {
                 identifierCount++;
             }
 
-            identifierHandler();
-
             // line end characters
             strcat(compiledCode, word);
             strcat(compiledCode, ";\n");
