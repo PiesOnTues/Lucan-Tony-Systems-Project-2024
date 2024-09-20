@@ -132,6 +132,25 @@ char *processLine(char *line) {
 
         }
 
+        // Handle return statement
+        else if (strcmp(word, "return") == 0) {
+            
+            strcat(compiledLine, "return ");
+
+            // Concatenate the expression after "return"
+            word = strtok(NULL, " ");
+            while (word != NULL) {
+                strcat(compiledLine, word);
+                word = strtok(NULL, " ");
+                if (word != NULL) {
+                    strcat(compiledLine, " ");
+                }
+            }
+
+            strcat(compiledLine, ";\n");
+            break;  // Since return ends the line
+        }
+
         // Handle variable assignment
         else if (strcmp(word, "<-") == 0) {
 
