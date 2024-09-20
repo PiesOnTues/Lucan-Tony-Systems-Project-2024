@@ -25,7 +25,6 @@ int funcIndex = 0;
 // Tells us if we are in a function or not
 bool inFunc = false;
 
-
 // Processes a single function definition line
 char* FunctionHeader(char *line) {
     
@@ -109,7 +108,7 @@ char *processLine(char *line) {
         if (strcmp(word, "print") == 0) {
                     
             // concatenates printf function for float vals
-            strcat(compiledLine, "printf(\"%f\\n\", ");
+            strcat(compiledLine, "printVal(");
             
             // concatenates first variable
             word = strtok(NULL, " \t");
@@ -166,7 +165,7 @@ void processFile(FILE *file) {
     char line[LINELENGTH];
 
     // Adds lines to import C11 standard libraries
-    strcat(compiledCode, "#include <stdio.h>\n");
+    strcat(compiledCode, "#include <stdio.h>\n #include <math.h> \n");
 
     // Reads file line by line
     while (fgets(line, sizeof(line), file)) {
@@ -211,6 +210,9 @@ void processFile(FILE *file) {
     }
 
     // the next few lines set up the structure of the fully compiled output file
+
+    // adds function that accounts for integer printing
+    strcat(compiledCode, "void printVal(double value) { if (value == (int)value) { printf(\"%d\\n\", (int)value); } else { printf(\"%f\\n\", value); } }"); 
 
     // adds code of non-main functions
     strcat(compiledCode, funcCode);

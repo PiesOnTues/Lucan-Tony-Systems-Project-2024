@@ -1,10 +1,7 @@
 #include <stdio.h>
-double increment(double value) { 
-		return 0;
- }
-int main() { 
-double one = 1;
-printf("%f\n", increment(3)+increment(4));
-print increment(3) + increment(4);
+ #include <math.h> 
+void printVal(double value) { if (value == (int)value) { printf("%d\n", (int)value); } else { printf("%f\n", value); } }int main() { 
+double x = 2.5;
+printVal(x);
 return 0;
  }
