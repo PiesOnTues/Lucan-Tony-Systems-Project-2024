@@ -20,12 +20,12 @@ char mainCode[BUFSIZ];
 char funcCode[BUFSIZ];
 
 // funcArr stores the name of each new function when it is compiled
-char funcArr[50][100];
+char funcArr[BUFSIZ][100];
 // funcIndex stores the current index for referencing the funcList array
 int funcIndex = 0;
 
 // varArr stores the name of each new variable when it is compiled
-char varArr[50][100];
+char varArr[BUFSIZ][100];
 // varIndex stores the current index for referencing the varArr
 int varIndex = 0;
 
@@ -167,10 +167,6 @@ char *processLine(char *line) {
                 strcat(compiledCode, word);
                 strcat(compiledCode, " = 0;");
                 strcat(compiledLine, "0");
-
-
-
-                
             }
 
             // Ends print statement if it is a one variable/number print (e.g. print 3.5) 
@@ -185,12 +181,6 @@ char *processLine(char *line) {
             word = strtok(NULL, " ");
             strcat(compiledLine, word);
             strcat(compiledLine, ");\n");
-            
-                
-            
-
-            
-
         }
 
         // Handle return statement
