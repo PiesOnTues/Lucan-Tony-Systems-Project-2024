@@ -37,7 +37,7 @@ int identifierCount = 0;
 
 
 
-// Checks if the string passed in satisfies the condition for a valid ml identifier or not
+// Checks if the string passed in satisfies the condition for a valid ml identifier or not, and handles the error accordingly
 void validateIdentifier(char *id) {
 
     // Check if the function name is between 1-12 characters
@@ -81,6 +81,7 @@ char* functionHeader(char *line) {
 
     // iterates the total identifer count
     identifierCount++;
+    printf("%d",identifierCount);
 
     // Process function parameters
     while ((word = strtok(NULL, " ")) != NULL) {
@@ -152,6 +153,17 @@ bool funcExists(const char *funcName) {
 }
 
 
+
+// checks if the value of a variable is actually valid and handles such an error
+validateValue(char *val) {
+
+    // checks if the value passed in is just some random string of non digitcharacters
+    if (!varExists(val) && !funcExists(val) && !isNum(val)) {
+        // if so an error is thrown
+        fprintf(stderr, "Assigned value must be either a valid identifier or a numerical value\n");
+        exit(EXIT_FAILURE);
+    }
+}
 
 // processes a single line of ml
 char *processLine(char *line) {
@@ -263,6 +275,8 @@ char *processLine(char *line) {
             // Generates and concatenates variable's assigned value
             word = strtok(NULL, " ");
             while (word != NULL) {
+                // check that the value assigned to the variable isnt some random string of characters
+                validateValue(word);
                 strcat(tempVarCode, word);
                 word = strtok(NULL, " ");
                 }
@@ -291,6 +305,7 @@ char *processLine(char *line) {
         }
     }
 
+    printf("%d\n",identifierCount);
     return compiledLine;
 
 }
