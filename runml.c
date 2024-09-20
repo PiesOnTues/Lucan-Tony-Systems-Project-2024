@@ -104,7 +104,7 @@ bool varExists(const char *varName) {
         if (varArr[i] == NULL) {
             break;
         }
-        if (strstr(varName, varArr[i])) {
+        if (strcmp(varName, varArr[i]) == 0) {
             return true;
         }
     }
@@ -147,9 +147,9 @@ bool funcExists(const char *funcName) {
 
 // processes a single line of ml
 char *processLine(char *line) {
+
     // Stores previous word
     char prev[50] = {0};
-
 
     // Stores the processed line as a whole
     static char compiledLine[LINELENGTH];
@@ -242,7 +242,7 @@ char *processLine(char *line) {
         // Concatenates variable directly to compiledCode so variables global scope
         else if (strcmp(word, "<-") == 0) {
 
-            char tempVarCode[BUFSIZ];
+            char tempVarCode[BUFSIZ] = "";
 
             // concatenates: "double" + variable name + "="
             strcat(tempVarCode, "double ");
@@ -263,6 +263,7 @@ char *processLine(char *line) {
                 strcpy(varArr[varIndex++], prev);
                 identifierCount++;
             }
+            
             // line end characters
             strcat(tempVarCode, ";\n");
 
