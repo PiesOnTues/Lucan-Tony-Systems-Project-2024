@@ -56,6 +56,8 @@ char* FunctionHeader(char *line) {
     } else {
         // stores function name in funcName array, and iterates the indexer
         strcpy(funcArr[funcIndex++], word);
+
+        // iterates the total identifer count
         identifierCount++;
     }
 
@@ -79,7 +81,8 @@ char* FunctionHeader(char *line) {
     return funcDef;
 }
 
-bool isVar(const char *varName) {
+bool varExists(const char *varName) {
+
     // checks if item is in the list
     for (int i = 0; i < varIndex; i++) {
         if (varArr[i] == NULL) {
@@ -106,7 +109,7 @@ int isNum(const char *str) {
 
 
 // function to check if a token exists as a predefined function
-bool isFunc(const char *funcName) {
+bool funcExists(const char *funcName) {
 
     // checks if item is in the list
     for (int i = 0; i < funcIndex; i++) {
@@ -159,7 +162,7 @@ char *processLine(char *line) {
 
             // checks if first variable/float is a already defined variable or is a double
             word = strtok(NULL, " \t");
-            if (isVar(word) || isNum(word)) {
+            if (varExists(word) || isNum(word)) {
                 // concatenates first variable/float
                 if (word != NULL) {
                     strcat(compiledLine, word);
@@ -212,19 +215,20 @@ char *processLine(char *line) {
 
             // concatenates: "double" + variable name + "="
             strcat(compiledCode, "double ");
-            strcat(compiledCode, prev);  
+            strcat(compiledCode, prev);  // varname
             strcat(compiledCode, " = ");
 
             // Generates and concatenates variable's assigned value
             word = strtok(NULL, " ");
-            // Checks if identifier count has been exceeded
-            if (identifierCount > 50) {
-                printf("Identifier limit of 50 exceeded");
-            } else {
+
+            // make sure variable doesnt already exist
+            if (!varExists(prev)) {
                 // stores var name in varArr and iterates the indexer
-                strcpy(varArr[varIndex++], word);
+                strcpy(varArr[varIndex++], prev);
                 identifierCount++;
             }
+
+            // line end characters
             strcat(compiledCode, word);
             strcat(compiledCode, ";\n");
         }

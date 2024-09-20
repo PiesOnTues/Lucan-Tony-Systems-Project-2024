@@ -1,2 +1,4 @@
-for i in range(30):
-    print(f"v{i} <- 10")
+
+for i in range(60):
+    c = i + 1
+    print(f"v{c} <- 10")
